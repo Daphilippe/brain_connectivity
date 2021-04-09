@@ -4,7 +4,7 @@
 @date: 08/04/2021
 @version: 1.0
 @Recommandation: Python 3.7
-@But: Interpolation
+@But: Régularisation
 """
 # -*- coding: utf-8 -*-
 import numpy as np
@@ -62,16 +62,19 @@ if True:
     # Cost matrix
     M = ot.dist(Img2Xs, Img2Xt)
     tools.save_value(M,'M',directory=racine)
-    if False:
+    if True:
+        # Sans régularisation
         G0 = ot.emd(aa, bb, M, numItermax=1000000)
         process.auto_processing(Xs,a,Xt,b,G0,racine,'G0')  
         process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,G0,str(racine)+'/G0/images',label='both')
     
+        # Régularisation entropique
         lambd=10
         temp = ot.sinkhorn(aa, bb, M, lambd)
         process.auto_processing(Img2Xs,aa,Img2Xt,bb,temp,str(racine),'G'+str(lambd))  
         process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,temp,str(racine)+'/G'+str(lambd)+'/images',label='both')
-    else:
+        
+        # Double régularisation
         reg_entropique=10
         reg_lasso=0.1
         temp2=ot.optim.gcg(aa, bb, M, reg_entropique, reg_lasso, f, df, numItermax=1000000)
