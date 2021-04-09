@@ -19,10 +19,10 @@ Xt,b=T
 # Cost matrix
 M = ot.dist(Xs, Xt)
 M /= M.max()
-tools.save_value(M,'M',directory='Discret 1')
+racine='discret_1'
+tools.save_value(M,'M',directory=racine)
 
 G0 = ot.emd(a, b, M) #résolver sans terme de régularisation, on a bien choisit la fonction de cout associé à la norme 2
-racine='discret_1'
 process.auto_processing(Xs,a,Xt,b,G0,racine,'G0')  
 process.auto_affichage_discret(Xs,Xt,M,G0,str(racine)+'/G0/images')
 
