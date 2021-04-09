@@ -35,6 +35,15 @@ for i in range(len(source_map)):
     display.show_map(source_map[i])
     tools.save_fig('source_'+str(i),directory=racine)
 
+# Barycentre
+
+def f(G):
+    #Frobeniusregularization
+    return 0.5 * np.sum(G**2)
+
+def df(G):
+    return G
+
 if True:
     # Processing
     Xs,a=source_dot[0]
@@ -53,14 +62,21 @@ if True:
     # Cost matrix
     M = ot.dist(Img2Xs, Img2Xt)
     tools.save_value(M,'M',directory=racine)
+    if False:
+        G0 = ot.emd(aa, bb, M, numItermax=1000000)
+        process.auto_processing(Xs,a,Xt,b,G0,racine,'G0')  
+        process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,G0,str(racine)+'/G0/images',label='both')
     
-    G0 = ot.emd(aa, bb, M, numItermax=1000000)
-    process.auto_processing(Xs,a,Xt,b,G0,racine,'G0')  
-    process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,G0,str(racine)+'/G0/images',label='both')
-    
-    lambd=10
-    temp = ot.sinkhorn(aa, bb, M, lambd)
-    process.auto_processing(Img2Xs,aa,Img2Xt,bb,temp,str(racine),'G'+str(lambd))  
-    process.auto_affichage_discret(Img2Xs,Img2Xt,M,temp,str(racine)+'/G'+str(lambd)+'/images',label='both')
-
+        lambd=10
+        temp = ot.sinkhorn(aa, bb, M, lambd)
+        process.auto_processing(Img2Xs,aa,Img2Xt,bb,temp,str(racine),'G'+str(lambd))  
+        process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,temp,str(racine)+'/G'+str(lambd)+'/images',label='both')
+    else:
+        reg_entropique=10
+        reg_lasso=0.1
+        temp2=ot.optim.gcg(aa, bb, M, reg_entropique, reg_lasso, f, df, numItermax=1000000)
+        
+        process.auto_processing(Img2Xs,aa,Img2Xt,bb,temp2,str(racine),'2reg_'+str(reg_entropique)+'_'+str(reg_lasso))
+        process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,temp2,str(racine)+'/2reg_'+str(reg_entropique)+'_'+str(reg_lasso)+'/images',label='both')
+        
 sys.exit()
