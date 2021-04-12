@@ -2,8 +2,8 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
-@version: 1.2
-@revision: 09/04/2021
+@version: 1.4
+@revision: 12/04/2021
 @Recommandation: Python 3.7
 """
 import numpy as np
@@ -248,9 +248,9 @@ def degree(xs,xt,G,degree=1):
         if len(temp)!=0:
             if (degree) > len(temp):
                 temp1=len(temp)
-            weight.append(temp[temp1-1][0])
-            pos.append(temp[temp1-1][1])
-    return (pos,weight)
+            weight.append([j,temp[temp1-1][0]])
+            pos.append([j,temp[temp1-1][1]])#point de xs liée à xt (on a l'ensemble des xt qui a une correspondance vers xs)
+    return (np.array(pos),np.array(weight))
         
 def save_value(value,title,directory=''):
     """Save value
