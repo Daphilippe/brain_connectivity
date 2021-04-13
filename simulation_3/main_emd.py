@@ -66,12 +66,20 @@ if True:
     reg_entropique=10
     temp2=ot.optim.gcg(aa, bb, M, reg_entropique, reg_lasso, f, df)
     process.auto_processing(Img2Xs,aa,Img2Xt,bb,temp2,str(racine),'2reg_'+str(reg_entropique)+'_'+str(reg_lasso))
-    process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,temp2,str(racine)+'/2reg_'+str(reg_entropique)+'_'+str(reg_lasso)+'/images',label='both')
+
+    pos1_G0=np.load('try 3/G0/pos1_G0.npy')
+    w1_G0=np.load('try 3/G0/w1_G0.npy')
+    
+    process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,temp2,serie=str(racine)+'/2reg_'+str(reg_entropique)+'_'+str(reg_lasso)+'/images',label='both')
     
     # Sans régularisation
     print('Sans regularisation')
     G0 = ot.emd(aa, bb, M, numItermax=1000000)
     process.auto_processing(Img2Xs,aa,Img2Xt,bb,G0,racine,'G0')  
+    
+    pos1_G0=np.load('try 3/G0/pos1_G0.npy')
+    w1_G0=np.load('try 3/G0/w1_G0.npy')
+    
     process.auto_affichage_continue(Img2Xs,aa,Img2Xt,bb,M,G0,str(racine)+'/G0/images',label='both')
         
 sys.exit()

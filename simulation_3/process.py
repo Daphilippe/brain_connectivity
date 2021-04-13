@@ -2,7 +2,7 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
-@version: 1.2
+@version: 1.4
 @revision: 09/04/2021
 @Recommandation: Python 3.7
 """
@@ -11,7 +11,7 @@ import tools
 
 import matplotlib.pylab as plt
 
-def auto_affichage_discret(Xs,Xt,M,G,serie):
+def auto_affichage_discret(Xs,Xt,M,G,pos,weight=None,serie=''):
     """ Automatisation display processus for dots
 
     Parameters
@@ -25,7 +25,7 @@ def auto_affichage_discret(Xs,Xt,M,G,serie):
     G : ndarray, shape (na,nb)
         OT matrix
     serie : string
-        directory folder.
+        directory folder. The default is ''.
 
     Returns
     -------
@@ -55,14 +55,15 @@ def auto_affichage_discret(Xs,Xt,M,G,serie):
     tools.save_fig('OT_transport',directory=serie)
     
     # Affichage détaillé
-    display.plot_dots_links(Xs,Xt,G,degree_link=1,degree_label=1,color_weight=0.2,xs_color=cols)
+    
+    display.plot_dots_links(Xs,Xt,pos,weight,xs_color=cols)
     tools.save_fig('links',directory=serie)
-    display.plot_dots_projection(Xs,Xt,G,xs_color=cols,xt_color=colt)
+    display.plot_dots_projection(Xs,Xt,pos,xs_color=cols,xt_color=colt)
     tools.save_fig('labelling',directory=serie)
     
     print('auto_affichage_discret done '+str(serie))
     
-def auto_affichage_continue(Xs,a,Xt,b,M,G,serie,label='amplitude'):
+def auto_affichage_continue(Xs,a,Xt,b,M,G,pos,weight=None,serie='',label='both'):
     """ Automatisation display processus for map
 
     Parameters
@@ -79,11 +80,15 @@ def auto_affichage_continue(Xs,a,Xt,b,M,G,serie,label='amplitude'):
         Cost_matrix
     G : ndarray, shape (na,nb)
         OT matrix
+    pos : ndarray, shape (nt,2)
+        Correspondance xt dots with ns dots. We don't nessesary have bijection between ns and nt
+    weight : ndarray, shape (nt,2)
+        weight of bridge between xt dots with ns dots. We don't nessesary have bijection between ns and nt
     serie : string
         directory folder.
     label : string
         Choice : 'amplitude', 'position', 'both'
-        The default is amplitude
+        The default is both.
 
     Returns
     -------
@@ -115,9 +120,9 @@ def auto_affichage_continue(Xs,a,Xt,b,M,G,serie,label='amplitude'):
         tools.save_fig('Initial_space_pos',directory=serie)
         
         # Affichage détaillé
-        #display.plot_dots_links(Xs,Xt,G,degree_link=1,degree_label=1,color_weight=0.2,xs_color=cols)
-        #tools.save_fig('links_pos',directory=serie)
-        display.plot_dots_projection(Xs,Xt,G,xs_color=cols,xt_color=colt)
+        display.plot_dots_links(Xs,Xt,pos,weight,xs_color=cols)
+        tools.save_fig('links_pos',directory=serie)
+        display.plot_dots_projection(Xs,Xt,pos,xs_color=cols,xt_color=colt)
         tools.save_fig('labelling_pos',directory=serie)
     
     if label=='amplitude' or label=='both':
@@ -127,13 +132,13 @@ def auto_affichage_continue(Xs,a,Xt,b,M,G,serie,label='amplitude'):
         tools.save_fig('Initial_space_ampl',directory=serie)
         
         # Affichage détaillé
-        # display.plot_dots_links(Xs,Xt,G,degree_link=1,degree_label=1,color_weight=0.2,xs_color=cols)
-        # tools.save_fig('links_ampl',directory=serie)
-        display.plot_dots_projection(Xs,Xt,G,xs_color=cols,xt_color=colt)
+        display.plot_dots_links(Xs,Xt,pos,weight,xs_color=cols)
+        tools.save_fig('links_ampl',directory=serie)
+        display.plot_dots_projection(Xs,Xt,pos,xs_color=cols,xt_color=colt)
         tools.save_fig('labelling_ampl',directory=serie)
     print('auto_affichage_continue done '+str(serie))
     
-def auto_processing(Xs,a,Xt,b,G,directory,affixe):  
+def auto_processing(Xs,a,Xt,b,G,directory='',affixe=''):  
     """ Automatisation save variables processus
     
 
@@ -150,9 +155,9 @@ def auto_processing(Xs,a,Xt,b,G,directory,affixe):
     G : ndarray, shape (na,nb)
         OT matrix
     directory : string
-        directory folder.
+        directory folder. The default is ''.
     affixe : string
-        name of variables
+        name of variables. The default is ''.
 
     Returns
     -------
@@ -162,7 +167,6 @@ def auto_processing(Xs,a,Xt,b,G,directory,affixe):
     if directory[-1]!='/':
         directory=directory+'/'
     tools.save_value(G,str(affixe),directory)
-    #process.auto1(Xs,Xt,M,G0,'Experience 1/0')
     pos1_G,w1_G=tools.degree(Xs,Xt,G,degree=1)
     tools.save_value(pos1_G,'pos1_'+str(affixe),directory+str(affixe))
     tools.save_value(w1_G,'w1_'+str(affixe),directory+str(affixe))
