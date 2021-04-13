@@ -9,6 +9,7 @@
 import display
 import tools
 
+import numpy as np
 import matplotlib.pylab as plt
 
 def auto_affichage_discret(Xs,Xt,M,G,pos,weight=None,serie=''):
@@ -175,3 +176,15 @@ def auto_processing(Xs,a,Xt,b,G,directory='',affixe=''):
     tools.save_value(pos2_G,'pos2_'+str(affixe),directory+str(affixe))
     tools.save_value(w2_G,'w2_'+str(affixe),directory+str(affixe))
     print('Auto_processing done '+str(directory)+str(affixe))
+
+def automatisation_continue(Xs,a,Xt,b,M,G,racine,affixe):
+    auto_processing(Xs,a,Xt,b,G,racine,affixe)  
+    pos1=np.load(str(racine)+'/'+str(affixe)+'/pos1_'+str(affixe)+'.npy')
+    w1=np.load(str(racine)+'/'+str(affixe)+'/w1_'+str(affixe)+'.npy')
+    auto_affichage_continue(Xs,a,Xt,b,M,G,pos1,w1,str(racine)+'/G0/images',label='both')
+    
+def automatisation_discret(Xs,a,Xt,b,M,G,racine,affixe):
+    auto_processing(Xs,a,Xt,b,G,racine,affixe)  
+    pos1=np.load(str(racine)+'/'+str(affixe)+'/pos1_'+str(affixe)+'.npy')
+    w1=np.load(str(racine)+'/'+str(affixe)+'/w1_'+str(affixe)+'.npy')
+    auto_affichage_discret(Xs,Xt,M,G,pos1,w1,str(racine)+'/'+str(affixe)+'/images') 

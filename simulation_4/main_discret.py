@@ -14,8 +14,6 @@ import display
 import process
 import sys
 
-import matplotlib.pylab as plt
-
 xs=np.load('try 3/xs.npy')
 xt=np.load('try 3/xt.npy')
 
@@ -53,14 +51,7 @@ racine='Test'
 affixe='G0'
 M = ot.dist(xs, xt)
 G0 = ot.emd(a, b, M, numItermax=1000000)
-process.auto_processing(xs,a,xt,b,G0,racine,affixe)  
 
-pos1_G0=np.load(str(racine)+'/'+str(affixe)+'/pos1_'+str(affixe)+'.npy')
-w1_G0=np.load(str(racine)+'/'+str(affixe)+'/w1_'+str(affixe)+'.npy')
-
-process.auto_affichage_continue(xs,a,xt,b,M,G0,pos1_G0,w1_G0,str(racine)+'/'+str(affixe)+'/images',label='both')
-
-affixe='G1'
-process.auto_affichage_discret(xs,xt,M,G0,pos1_G0,w1_G0,str(racine)+'/'+str(affixe)+'/images')
+process.automatisation_discret(xs,a,xt,b,M,G0,racine,affixe)
 
 sys.exit()
