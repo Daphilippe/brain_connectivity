@@ -45,12 +45,6 @@ w1_G0=np.load('try 3/G0/w1_G0.npy')
 pos1_G0bis=pos1_G0.copy() #reverse sans recalcule du transport inverse
 pos1_G0bis[:, 0], pos1_G0bis[:, 1] = pos1_G0[:, 1], pos1_G0[:, 0]
 
-fig=plt.figure(figsize=(10,10))
-fig.add_subplot(2,2,1)
-plt.xlim(0,100) 
-plt.ylim(0,100)
-display.label(xs,xt,pos1_G0,cols)
-fig.add_subplot(2,2,2)
-plt.xlim(0,100) 
-plt.ylim(0,100)
-display.label(xt,xs,pos1_G0bis,colt)
+
+display.plot_dots_projection(xs,xt,pos1_G0,xs_color=cols,xt_color=colt,size=(60,20))
+display.plot_dots_links(xs,xt,pos1_G0,xs_color=cols)
