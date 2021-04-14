@@ -6,7 +6,6 @@
 @Recommandation: Python 3.7
 @But: Régularisation
 """
-# -*- coding: utf-8 -*-
 import numpy as np
 import ot
 

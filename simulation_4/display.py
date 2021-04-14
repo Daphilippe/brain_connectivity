@@ -2,8 +2,8 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
-@version: 1.45
-@revision: 13/04/2021
+@version: 1.50
+@revision: 14/04/2021
 @Recommandation: Python 3.7
 """
 import matplotlib.pylab as plt
@@ -229,7 +229,7 @@ def plot_dots_links(xs,xt,pos,weight=None,xs_color=None,title=None,size=(20,20))
     plt.ylim(0,100)
     link(xs, xt, pos,weight,c=[0.5,0.5,0.5])
     label(xs, xt, pos,xs_color)
-    plt.scatter(xs[:,0], xs[:,1],marker = '+', s = 50, color = xs_color)
+    plt.scatter(xs[:,0], xs[:,1],marker = '+', s = 50)
     
     ns=xs.shape[0]
     nt=xt.shape[0]

@@ -2,8 +2,8 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
-@version: 1.4
-@revision: 09/04/2021
+@version: 1.50
+@revision: 14/04/2021
 @Recommandation: Python 3.7
 """
 import display
@@ -38,7 +38,7 @@ def auto_affichage_discret(Xs,Xt,M,G,pos,weight=None,serie=''):
     
     # Plot 
     cols,colt=tools.label_position(Xs,Xt)
-    display.plot_dots2(Xs,Xt,xs_color=cols,xt_color=colt)
+    display.plot_dots2(Xs,Xt,xs_color=cols)
     tools.save_fig('Initial_space',directory=serie)
     
     #Affichage cout de la transformation
@@ -59,7 +59,7 @@ def auto_affichage_discret(Xs,Xt,M,G,pos,weight=None,serie=''):
     
     display.plot_dots_links(Xs,Xt,pos,weight,xs_color=cols)
     tools.save_fig('links',directory=serie)
-    display.plot_dots_projection(Xs,Xt,pos,xs_color=cols,xt_color=colt)
+    display.plot_dots_projection(Xs,Xt,pos,xs_color=cols)
     tools.save_fig('labelling',directory=serie)
     
     print('auto_affichage_discret done '+str(serie))
@@ -181,7 +181,7 @@ def automatisation_continue(Xs,a,Xt,b,M,G,racine,affixe):
     auto_processing(Xs,a,Xt,b,G,racine,affixe)  
     pos1=np.load(str(racine)+'/'+str(affixe)+'/pos1_'+str(affixe)+'.npy')
     w1=np.load(str(racine)+'/'+str(affixe)+'/w1_'+str(affixe)+'.npy')
-    auto_affichage_continue(Xs,a,Xt,b,M,G,pos1,w1,str(racine)+'/G0/images',label='both')
+    auto_affichage_continue(Xs,a,Xt,b,M,G,pos1,w1,str(racine)+'/'+str(affixe)+'/images',label='both')
     
 def automatisation_discret(Xs,a,Xt,b,M,G,racine,affixe):
     auto_processing(Xs,a,Xt,b,G,racine,affixe)  
