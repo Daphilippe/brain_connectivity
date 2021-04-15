@@ -14,6 +14,7 @@ import display
 import process
 import sys
     
+print('Begin')
 racine='continue_1'
 # Création des données
 source_dot=[]
@@ -66,6 +67,7 @@ if True:
     affixe='G0'    
     process.automatisation_continue(Img2Xs,aa,Img2Xt,bb,M,G0,racine,affixe)
         
+print('End')
 sys.exit()
 
 if False:

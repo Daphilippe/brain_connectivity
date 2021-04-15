@@ -14,6 +14,7 @@ import tools
 import process
 import sys
 
+print('Begin')
 racine_data='data/L'    
 sujet1='100206_L_connectivity_withHKnob.npy'
 sujet2='103111_L_connectivity_withHKnob.npy'
@@ -56,4 +57,5 @@ if False:
         
     affixe= '2reg_'+str(reg_entropique)+'_'+str(reg_lasso)
     process.automatisation_continue(Img2Xs,aa,Img2Xt,bb,Mc,temp2,racine,affixe)
+print('End')
 sys.exit()
