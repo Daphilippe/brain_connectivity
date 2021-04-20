@@ -2,7 +2,7 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 19/04/2021
-@version: 1.4
+@version: 2.0
 @Recommandation: Python 3.7
 @revision: 20/04/2021
 @But: Centroide
