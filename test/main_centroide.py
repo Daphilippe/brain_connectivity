@@ -12,6 +12,9 @@ sys.path.insert(1,'../libs')
 import centroide
 
 if False:# take a lot of time
-    centroide.compute(source='./data/L/',directory='variables/')
-centroide.display(data_source='../data/L',centroide_source='../variables/L',directory='variables/L')
-centroide.display(data_source='../data/R',centroide_source='../variables/R',directory='variables/R')
+    centroide.compute(source='../data/L/',directory='./variables/')
+if True:
+    centroide.display(data_source='../data/L',centroide_source='../variables/L',directory='../variables/L')
+    centroide.display(data_source='../data/R',centroide_source='../variables/R',directory='../variables/R')
+    centroide.matrix('../variables/L/')
+    centroide.matrix('../variables/R/')

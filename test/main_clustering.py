@@ -6,7 +6,6 @@
 @Recommandation: Python 3.7
 @revision: 21/04/2021
 @But: clustering
-@Step: 2
 """
 import numpy as np
 
@@ -15,9 +14,9 @@ import pandas as pd
 import matplotlib.pylab as plt
 
 # Left
-d=np.load('./variables_L/matrix_L.npy')
-index=np.load('./variables_L/matrix_L_index.npy',allow_pickle=True)
-columns=np.load('./variables_L/matrix_L_columns.npy',allow_pickle=True)
+d=np.load('../variables/L/matrix.npy')
+index=np.load('../variables/L/matrix_index.npy',allow_pickle=True)
+columns=np.load('../variables/L/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
 # diagonalisation
