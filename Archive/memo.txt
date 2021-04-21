@@ -1,3 +1,0 @@
-simulation_3 : etude des projections de source vers cible (simulation 1/2 essaies)
-simulation 6 : détermination du centroide (simulation 4/5 essaies)
-simulation 7 : détermination du barycentre
