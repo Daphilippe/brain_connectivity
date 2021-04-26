@@ -11,6 +11,7 @@ import numpy as np
 import sys
 import glob
 import ot
+import matplotlib.pylab as plt
 
 sys.path.insert(1,'../libs')
 import tools, display, process
@@ -21,12 +22,13 @@ variables='../variables/L/'
 
 measures_locations = []
 measures_weights = []
-i=0
+N=0
 for np_name in glob.glob(str(source)+'*.np[yz]'):
     measures_locations.append(np.load(np_name))
     measures_weights.append(ot.unif(len(measures_locations[-1])))
-    if i>3:
+    if N>3:
         break
+    N=N+1
 
 nb_dot=int(np.mean([np.shape(i)[0] for i in measures_weights]))
 X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
@@ -35,11 +37,11 @@ b=ot.unif(np.shape(X_init)[0])
 
 X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1000000)
 
-pl.figure(1)
+plt.figure(1)
 for (x_i, b_i) in zip(measures_locations, measures_weights):
     color = np.random.randint(low=1, high=10 * N)
-    pl.scatter(x_i[:, 0], x_i[:, 1], s=b_i * 1000, label='input measure')
-pl.scatter(X[:, 0], X[:, 1], s=b * 1000, c='black', marker='^', label='2-Wasserstein barycenter')
-pl.title('Data measures and their barycenter')
-pl.legend(loc=0)
-pl.show()
+    plt.scatter(x_i[:, 0], x_i[:, 1], s=b_i * 1000, label='input measure')
+plt.scatter(X[:, 0], X[:, 1], s=b * 1000, c='black', marker='^', label='2-Wasserstein barycenter')
+plt.title('Data measures and their barycenter')
+plt.legend(loc=0)
+plt.show()
