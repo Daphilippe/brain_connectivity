@@ -38,25 +38,23 @@ b=ot.unif(np.shape(X_init)[0])
 #b= np.ones((nb_dot,))/nb_dot # weights of the barycenter (it will not be optimized, only the locations are optimized)
 
 Ltime=[]
-i=Nmax
-#for i in range(2,Nmax):
-t1=time.time()
-X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i],X_init,b,numItermax=1)
-tools.save_value(X,str(i),directory='test')
-
-
-if False:
-    plt.figure()
-    for (x_i, b_i) in zip(measures_locations[:i], measures_weights[:i]):
-        color = np.random.randint(low=1, high=10 * N)
-        plt.scatter(x_i[:, 0], x_i[:, 1], s=b_i * 1000, label='input measure')
-    plt.scatter(X[:, 0], X[:, 1], s=b * 1000, c='black', marker='^', label='2-Wasserstein barycenter')
-    plt.title('Data measures and their barycenter')
-    plt.legend(loc=0)
+X=None
+for i in range(0,100):
+    t1=time.time()
+    
+    if X is None:
+        X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
+    else:
+        X_init=X
+        X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
+    tools.save_value(X,str(i),directory='test')
+    
+    display.show_dot(X,title='Barycenter')
     tools.save_fig(str(i),directory='test')
-t2=time.time()
+    
+    t2=time.time()
 
-Ltime.append(t2-t1)
+    Ltime.append(t2-t1)
 print(i,Ltime[-1])
     
 sys.exit()
