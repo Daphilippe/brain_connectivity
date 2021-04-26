@@ -24,7 +24,7 @@ variables='../variables/L/'
 measures_locations = []
 measures_weights = []
 N=1
-Nmax=5
+Nmax=100
 for np_name in glob.glob(str(source)+'*.np[yz]'):
     measures_locations.append(np.load(np_name))
     measures_weights.append(ot.unif(len(measures_locations[-1])))
@@ -38,11 +38,14 @@ b=ot.unif(np.shape(X_init)[0])
 #b= np.ones((nb_dot,))/nb_dot # weights of the barycenter (it will not be optimized, only the locations are optimized)
 
 Ltime=[]
-for i in range(2,Nmax):
-    t1=time.time()
-    X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i],X_init,b,numItermax=1)
-    tools.save_value(X,str(i),directory='test')
-    
+i=Nmax
+#for i in range(2,Nmax):
+t1=time.time()
+X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i],X_init,b,numItermax=1)
+tools.save_value(X,str(i),directory='test')
+
+
+if False:
     plt.figure()
     for (x_i, b_i) in zip(measures_locations[:i], measures_weights[:i]):
         color = np.random.randint(low=1, high=10 * N)
@@ -51,9 +54,9 @@ for i in range(2,Nmax):
     plt.title('Data measures and their barycenter')
     plt.legend(loc=0)
     tools.save_fig(str(i),directory='test')
-    t2=time.time()
-    
-    Ltime.append(t2-t1)
-    print(i,Ltime[-1])
+t2=time.time()
+
+Ltime.append(t2-t1)
+print(i,Ltime[-1])
     
 sys.exit()
