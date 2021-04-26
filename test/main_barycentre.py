@@ -40,7 +40,13 @@ b=ot.unif(np.shape(X_init)[0])
 Ltime=[]
 for i in range(2,Nmax):
     t1=time.time()
-    X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i],X_init,b,numItermax=100000)
+    
+    try :
+        temp_loc=[X,measures_locations[i]]
+        temp_w=[ot.unif(len(X))*i,measures_weights.app[i]]
+        X = ot.lp.free_support_barycenter(temp_loc,temp_w,X_init,b,numItermax=100000)
+    except:
+        X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i] ,X_init,b,numItermax=100000)
     tools.save_value(X,str(i),directory='test')
     
     plt.figure()
