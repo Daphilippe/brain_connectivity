@@ -55,6 +55,6 @@ for i in range(0,100):
     t2=time.time()
 
     Ltime.append(t2-t1)
-print(i,Ltime[-1])
+    print(i,Ltime[-1])
     
 sys.exit()
