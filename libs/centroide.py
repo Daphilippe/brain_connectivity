@@ -24,21 +24,26 @@ import tools
 def compute(source='./data/R/',directory='variables/'):
     if directory[-1]!='/':
         directory=directory+'/'
+        
     if source[-1]!='/':
         source=source+'/'
     
     numpy_vars = {}
     for np_name in glob.glob(str(source)+'*.np[yz]'):
         numpy_vars[np_name] = np.load(np_name)
+        
     size=len(source)
     Lval=[]
     Lname=[]
+    
     for i in numpy_vars:
         L2_val=[]
         L2_name=[] 
+        
         for j in numpy_vars:
             if i==j:
                 cost=0
+                
             else:
                 # M = ot.dist(xs,xt)
                 # xs = numpy_vars[i]
