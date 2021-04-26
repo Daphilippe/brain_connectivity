@@ -2,7 +2,7 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 21/04/2021
-@version: 1.00
+@version: 1.25
 @Recommandation: Python 3.7
 @revision: 22/04/2021
 @But: barycentre
@@ -24,7 +24,7 @@ variables='../variables/L/'
 measures_locations = []
 measures_weights = []
 N=1
-Nmax=100
+Nmax=5
 for np_name in glob.glob(str(source)+'*.np[yz]'):
     measures_locations.append(np.load(np_name))
     measures_weights.append(ot.unif(len(measures_locations[-1])))
@@ -40,13 +40,7 @@ b=ot.unif(np.shape(X_init)[0])
 Ltime=[]
 for i in range(2,Nmax):
     t1=time.time()
-    
-    try :
-        temp_loc=[X,measures_locations[i]]
-        temp_w=[ot.unif(len(X))*i,measures_weights.app[i]]
-        X = ot.lp.free_support_barycenter(temp_loc,temp_w,X_init,b,numItermax=100000)
-    except:
-        X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i] ,X_init,b,numItermax=100000)
+    X = ot.lp.free_support_barycenter(measures_locations[:i], measures_weights[:i],X_init,b,numItermax=1)
     tools.save_value(X,str(i),directory='test')
     
     plt.figure()
