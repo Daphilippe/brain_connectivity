@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 21/04/2021
-@version: 1.25
+@version: 1.50
 @Recommandation: Python 3.7
-@revision: 22/04/2021
+@revision: 27/04/2021
 @But: barycentre
 """
 import numpy as np
@@ -18,7 +18,7 @@ import tools, display
 # Chemins
 source='../data/L/'
 variables='../variables/L/'
-destination='test/barycentre 100/'
+destination='test/barycentre/'
 
 # Changement des données
 measures_locations = []
@@ -45,7 +45,7 @@ else:
     b=ot.unif(np.shape(X_init)[0])
     X=None
 
-# Calcul du barycentre    
+# Calcul du barycentre 1 
 for i in range(0,100):
     if X is None:
         X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
@@ -54,7 +54,7 @@ for i in range(0,100):
         X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
         
     # Sauvegarde
-    tools.save_value(X,str(i+itermax),directory=destination+str(2))
+    tools.save_value(X,str(i+itermax+1),directory=destination)
     display.show_dot(X,title='Barycenter')
-    tools.save_fig(str(i+itermax+1),directory=destination+str(2))
+    tools.save_fig(str(i+itermax+1),directory=destination)
 sys.exit()

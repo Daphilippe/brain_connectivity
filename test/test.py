@@ -14,6 +14,8 @@ import ot
 sys.path.insert(1,'../libs')
 import tools
 
+"""
+# Translation d'un nuage de point de manière uniforme et comparaison avec distance de Wasserstein
 (xs,a),_=tools.data_generator_simulation1()
 tools.save_value(xs,'xs',directory='./temp')
 tools.save_value(a,'a',directory='./temp')
@@ -30,5 +32,5 @@ for i in range(0,100):
     #pos1,w1=tools.degree(xs,xt,G,degree=1)
     #display.plot_dots_links(xs,xt,pos1,w1,xs_color=cols)
     #tools.save_fig('links',directory='./temp/'+str(i))
-
+"""
 sys.exit()
