@@ -11,16 +11,16 @@ import numpy as np
 import sys
 import glob
 import ot
-import matplotlib.pylab as plt
-import time
 
 sys.path.insert(1,'../libs')
-import tools, display, process
+import tools, display
 
-
+# Chemins
 source='../data/L/'
 variables='../variables/L/'
+destination='test/barycentre 100/'
 
+# Changement des données
 measures_locations = []
 measures_weights = []
 N=1
@@ -32,29 +32,29 @@ for np_name in glob.glob(str(source)+'*.np[yz]'):
         break
     N=N+1
 
-nb_dot=int(np.mean([np.shape(i)[0] for i in measures_weights]))
-X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
-b=ot.unif(np.shape(X_init)[0])
-#b= np.ones((nb_dot,))/nb_dot # weights of the barycenter (it will not be optimized, only the locations are optimized)
+# Initialisation du profil type
+LX=[int(i[len(destination):-4]) for i in glob.glob(str(destination)+'*.np[yz]') ]
+if len(LX)!=0:
+    # Chargement du profil type
+    itermax=np.max(LX)
+    X=np.load(destination+str(itermax)+'.npy')
+    b=ot.unif(np.shape(X)[0])
+else:
+    # Création du profil type
+    X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
+    b=ot.unif(np.shape(X_init)[0])
+    X=None
 
-Ltime=[]
-X=None
+# Calcul du barycentre    
 for i in range(0,100):
-    t1=time.time()
-    
     if X is None:
         X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
     else:
         X_init=X
         X = ot.lp.free_support_barycenter(measures_locations, measures_weights,X_init,b,numItermax=1)
-    tools.save_value(X,str(i),directory='test')
-    
+        
+    # Sauvegarde
+    tools.save_value(X,str(i+itermax),directory=destination+str(2))
     display.show_dot(X,title='Barycenter')
-    tools.save_fig(str(i),directory='test')
-    
-    t2=time.time()
-
-    Ltime.append(t2-t1)
-    print(i,Ltime[-1])
-    
+    tools.save_fig(str(i+itermax+1),directory=destination+str(2))
 sys.exit()

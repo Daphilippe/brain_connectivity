@@ -47,7 +47,8 @@ if True: #analyse spectrale
 if True:# clustering hierarchique
     import scipy.cluster.hierarchy as sch
     df=data.copy()
-    sim = np.exp(- 0.5*(d/np.max(d))**2) # pour obtenir un similarity matrix
+    #sim = np.exp(- 0.5*(d /np.max(d))**2) # pour obtenir un similarity matrix
+    sim=1-d/np.max(d)
     L = sch.linkage(sim, method='weighted')#alias WPGMA --complete,centroid,average,weighted
     plt.figure()
     sch.dendrogram(L)
