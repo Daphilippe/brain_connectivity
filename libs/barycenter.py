@@ -16,7 +16,7 @@ import ot
 import sys
 
 sys.path.insert(1,'../libs')
-import tools,display
+import tools
 
 # calcul barycentre 
 def free_support_barycenter(measures_locations, measures_weights, X_init, b=None, weights=None, numItermax=1000, stopThr=1e-7,num2Itermax=102400):
@@ -136,5 +136,3 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
             X = free_support_barycenter(L_loc, L_w,X_init,b,weights=np.array([(i+itermax)/(i+itermax+1),1/(i+itermax+1)]),stopThr=stopThr,num2Itermax=num2Itermax)  
         # Sauvegarde
         tools.save_value(X,str(i+itermax),directory=destination)
-        display.show_dot(X,title='Barycenter')
-        tools.save_fig(str(i+itermax),directory=destination)

@@ -29,7 +29,7 @@ M = ot.dist(xs,xt)
 # Compute OT matrix with emd algorithm
 G0 = ot.emd(a, b, M, numItermax=1000000)
 
-if True:
+if False:
     affixe='G0'
     
     pos1,w1=tools.degree(xs,xt,G0,degree=1)

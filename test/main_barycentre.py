@@ -48,15 +48,22 @@ else:
     X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
     b=ot.unif(np.shape(X_init)[0])
     X=None
-        
-#Calcul du barycentre itératif
-barycenter.iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax,itermax,stopThr=0.01,destination=destination)    
 
-# Affichage
-X=np.load('../variables/R/barycentre.npy')
-display.show_dot(X,title='Barycenter - dots')
+if False:# Prend du temps     
+    #Calcul du barycentre itératif
+    barycenter.iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax,itermax,stopThr=0.01,destination=destination)    
 
-_,_,Img_xs=tools.estimate_pseudo_density(X)
-display.show_map(Img_xs,title='Barycenter - map')
+# Sauvegarde des images
+i=0
+for np_name in glob.glob(str(destination)+'*.np[yz]'):
+    print(np_name)
+    display.show_dot(np.load(np_name),title='Barycenter')
+    tools.save_fig('dot_'+str(i),directory=destination)
+
+    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+    display.show_map(Img_xs,title='Barycenter')
+
+    tools.save_fig('map_'+str(i),directory=destination)
+    i=i+1
 
 sys.exit()
