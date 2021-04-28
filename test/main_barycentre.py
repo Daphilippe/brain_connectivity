@@ -68,7 +68,7 @@ def free_support_barycenter(measures_locations, measures_weights, X_init, b=None
             M_i = ot.dist(X, measure_locations_i)
             #T_i = ot.emd(b, measure_weights_i, M_i,numItermax=100000)
             T_i,_, _, _, result_code = ot.lp.emd_c(b, measure_weights_i, M_i,num2Itermax)
-            if result_code==3:
+            if result_code!=1:
                 print('EMD old max iteration : '+str(num2Itermax))
                 num2Itermax=num2Itermax*2
                 print('EMD new max iteration : '+str(num2Itermax))
