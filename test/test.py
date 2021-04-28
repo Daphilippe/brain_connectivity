@@ -65,4 +65,10 @@ if False:
         display.show_dot(X,title='Barycenter')
         tools.save_fig(str(i+itermax),directory=destination)
 """
+import display,tools
+X=np.load('../variables/L/barycentre.npy')
+display.show_dot(X,title='Barycenter - dots')
+
+_,_,Img_xs=tools.estimate_pseudo_density(X)
+display.show_map(Img_xs,title='Barycenter - map')
 sys.exit()
