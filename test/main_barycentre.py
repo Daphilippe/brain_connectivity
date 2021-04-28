@@ -55,15 +55,17 @@ if False:# Prend du temps
 
 # Sauvegarde des images
 i=0
+destination='../barycentre/L/'
+
 for np_name in glob.glob(str(destination)+'*.np[yz]'):
     print(np_name)
     display.show_dot(np.load(np_name),title='Barycenter')
-    tools.save_fig('dot_'+str(i),directory=destination)
+    #tools.save_fig('dot_'+str(i),directory=destination)
 
     _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
     display.show_map(Img_xs,title='Barycenter')
 
-    tools.save_fig('map_'+str(i),directory=destination)
+    #tools.save_fig('map_'+str(i),directory=destination)
     i=i+1
 
 sys.exit()
