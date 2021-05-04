@@ -1,22 +1,21 @@
 # -*- coding: utf-8 -*-
 """
 @author: Duy Anh Philippe Pham
-@date: 28/04/2021
+@date: 04/05/2021
 @version: 1.25
 @Recommandation: Python 3.7
-@revision: 04/05/2021
-@But: barycentre
-
-@list of functions
-- free_support_barycenter(measures_locations, measures_weights, X_init, b=None, weights=None, numItermax=1000, stopThr=1e-7,num2Itermax=102400)
-- iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100,itermax=0,stopThr=0.01,num2Itermax=102400,destination='temp/')
+@But: comparaison des algorithmes de barycentre
 """
 import numpy as np
-import ot
 import sys
+import glob
+import ot
+
+
+from time import process_time
 
 sys.path.insert(1,'../libs')
-import tools
+import tools, display
 
 # calcul barycentre 
 def free_support_barycenter(measures_locations, measures_weights, X_init, b=None, weights=None, numItermax=1000, stopThr=1e-7,num2Itermax=102400):
@@ -75,10 +74,10 @@ def free_support_barycenter(measures_locations, measures_weights, X_init, b=None
 
         for (measure_locations_i, measure_weights_i, weight_i) in zip(measures_locations, measures_weights,weights.tolist()):
             M_i = ot.dist(X, measure_locations_i)
-            #T_i = ot.sinkhorn(b, measure_weights_i, M_i,reg=10,numItermax=100000) # résolution plus lente
             T_i,_, _, _, result_code = ot.lp.emd_c(b, measure_weights_i, M_i,num2Itermax)
+            #T_i = ot.bregman.sinkhorn(b, measure_weights_i, M_i,reg=10,numItermax=100000) # résolution plus lente
             if result_code!=1:
-                print('EMD old max iteration : '+str(num2Itermax))
+                #print('EMD old max iteration : '+str(num2Itermax))
                 num2Itermax=num2Itermax*2
                 print('EMD new max iteration : '+str(num2Itermax))
             T_sum = T_sum + weight_i * np.reshape(1. / b, (-1, 1)) * np.matmul(T_i, measure_locations_i)
@@ -136,3 +135,74 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
             X = free_support_barycenter(L_loc, L_w,X_init,b,weights=np.array([(i+itermax)/(i+itermax+1),1/(i+itermax+1)]),stopThr=stopThr,num2Itermax=num2Itermax)  
         # Sauvegarde
         tools.save_value(X,str(i+itermax),directory=destination)
+        
+# Chemins
+source='../data/R/'
+variables='../variables/R/'
+destination='barycentre_R/minbis/'
+
+size=len(source)-1
+
+# Changement des données
+measures_locations = []
+measures_weights = []
+L_name=np.load(str(variables)+'L_name.npy')
+L_val=np.load(str(variables)+'L_val.npy')
+L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
+
+# pour 10 sujets
+i=0
+for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
+    np_name=source+np_name
+    measures_locations.append(np.load(np_name))
+    measures_weights.append(ot.unif(len(measures_locations[-1])))
+    if i>100:
+        break
+    i=i+1
+Nmax=np.shape(measures_locations)[0]
+
+# Initialisation du profil type
+
+if False:# Prend du temps     
+    #Calcul du barycentre itératif
+    itermax=0
+    # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
+    #k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
+    # X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
+    # b = np.ones((k,)) / k  # weights of the barycenter (it will not be optimized, only the locations are optimized)
+    
+    k=np.argmin([np.shape(i)[0] for i in measures_locations[:-1]]) #max
+    #k=np.argsort([np.shape(i)[0] for i in measures_locations])[len(measures_locations)//2] # median
+    #k=np.argmax([np.shape(i)[0] for i in measures_locations]) #max
+    #k=-1 # profile le moins représentatif par rapport au calcul du centroide = min
+    X_init = measures_locations[k]
+    
+    #X_init=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
+    b=ot.unif(np.shape(X_init)[0])
+
+    X=None
+    t1_start = process_time() 
+    iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax,itermax,stopThr=0.01,destination=destination)    
+    t1_stop = process_time() 
+    print(t1_stop-t1_start)
+    
+    # Sauvegarde des images
+    for np_name in glob.glob(str(destination)+'*.np[yz]'):
+        display.show_dot(np.load(np_name),title='Barycenter')
+        tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+    
+        _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+        display.show_map(Img_xs,title='Barycenter')
+        tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
+        
+if False:
+    L=[]
+    X=np.load("barycentre_R/centroide/99.npy")
+    X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+    for i in range(np.shape(measures_locations)[0]):
+        M=ot.dist(X,measures_locations[i])
+        G=ot.emd(ot.unif(len(X)),measures_weights[i],M,numItermax=1000000)
+        cost=G*M
+        L.append(np.sum(cost))
+    tools.save_value(L,'L','barycentre_R/ref/')    
+sys.exit()

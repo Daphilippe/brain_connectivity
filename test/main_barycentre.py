@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 21/04/2021
-@version: 1.75
+@version: 1.80
 @Recommandation: Python 3.7
-@revision: 28/04/2021
+@revision: 04/05/2021
 @But: barycentre
 """
 import numpy as np
