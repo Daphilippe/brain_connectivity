@@ -45,8 +45,11 @@ if len(LX)!=0:
 else:
     # Création du profil type
     itermax=0
-    X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
-    b=ot.unif(np.shape(X_init)[0])
+    #X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
+    #b=ot.unif(np.shape(X_init)[0])
+    k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
+    X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
+    b = np.ones((k,)) / k  # weights of the barycenter (it will not be optimized, only the locations are optimized)
     X=None
 
 if False:# Prend du temps     
