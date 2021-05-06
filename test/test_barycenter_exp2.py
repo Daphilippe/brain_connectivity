@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """
 @author: Duy Anh Philippe Pham
-@date: 04/05/2021
+@date: 06/05/2021
 @version: 1.25
 @Recommandation: Python 3.7
-@But: comparaison des algorithmes de barycentre
+@But: comparaison des algorithmes de barycentre en fonction de l'ordre des sujets
 """
 import numpy as np
 import sys
 import glob
 import ot
+import random
 
 
 from time import process_time
@@ -139,7 +140,7 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
 # Chemins
 source='../data/R/'
 variables='../variables/R/'
-destination='barycentre_R/minrandom/'
+destination='exp2/'+str(np.random.randint(0,100)*np.random.randint(0,100))
 
 size=len(source)-1
 
@@ -149,7 +150,8 @@ measures_weights = []
 L_name=np.load(str(variables)+'L_name.npy')
 L_val=np.load(str(variables)+'L_val.npy')
 #L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
-L_trie=[L_name[i][size:] for i in range(np.shape(L_val)[0])]#minrandom
+#L_trie=[L_name[i][size:] for i in range(np.shape(L_val)[0])]#minrandom
+L_trie=[L_name[i][size:] for i in random.sample(range(0,100), 100)]
 # pour 10 sujets
 i=0
 for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
@@ -163,19 +165,20 @@ Nmax=np.shape(measures_locations)[0]
 
 # Initialisation du profil type
 
-if False:# Prend du temps     
+if True:# Prend du temps     
     #Calcul du barycentre itératif
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
-    #k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
-    #X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
+    k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
+    #k=10000
+    X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
     # b = np.ones((k,)) / k  # weights of the barycenter (it will not be optimized, only the locations are optimized)
     
-    k=np.argmin([np.shape(i)[0] for i in measures_locations[:-1]]) #max
+    #k=np.argmin([np.shape(i)[0] for i in measures_locations[:-1]]) #max
     #k=np.argsort([np.shape(i)[0] for i in measures_locations])[len(measures_locations)//2] # median
     #k=np.argmax([np.shape(i)[0] for i in measures_locations]) #max
     #k=-1 # profile le moins représentatif par rapport au calcul du centroide = min
-    X_init = measures_locations[k]
+    #X_init = measures_locations[k]
     
     #X_init=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
     b=ot.unif(np.shape(X_init)[0])
@@ -197,12 +200,13 @@ if False:# Prend du temps
         
 if True:
     L=[]
-    X=np.load("barycentre_R/min/99.npy")
+    X=np.load(destination+"99.npy")
     #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
     for i in range(np.shape(measures_locations)[0]):
         M=ot.dist(X,measures_locations[i])
         G=ot.emd(ot.unif(len(X)),measures_weights[i],M,numItermax=1000000)
         cost=G*M
         L.append(np.sum(cost))
-    tools.save_value(L,'L','barycentre_R/min/')    
+    tools.save_value(L,'L',destination)    
+    tools.save_value(np.sum(L),'L_sum',destination)
 sys.exit()
