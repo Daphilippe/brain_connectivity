@@ -139,7 +139,7 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
 # Chemins
 source='../data/R/'
 variables='../variables/R/'
-destination='barycentre_R/minbis/'
+destination='barycentre_R/minrandom/'
 
 size=len(source)-1
 
@@ -148,8 +148,8 @@ measures_locations = []
 measures_weights = []
 L_name=np.load(str(variables)+'L_name.npy')
 L_val=np.load(str(variables)+'L_val.npy')
-L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
-
+#L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
+L_trie=[L_name[i][size:] for i in range(np.shape(L_val)[0])]#minrandom
 # pour 10 sujets
 i=0
 for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
@@ -168,7 +168,7 @@ if False:# Prend du temps
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
     #k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
-    # X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
+    #X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
     # b = np.ones((k,)) / k  # weights of the barycenter (it will not be optimized, only the locations are optimized)
     
     k=np.argmin([np.shape(i)[0] for i in measures_locations[:-1]]) #max
@@ -195,14 +195,14 @@ if False:# Prend du temps
         display.show_map(Img_xs,title='Barycenter')
         tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
         
-if False:
+if True:
     L=[]
-    X=np.load("barycentre_R/centroide/99.npy")
-    X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+    X=np.load("barycentre_R/min/99.npy")
+    #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
     for i in range(np.shape(measures_locations)[0]):
         M=ot.dist(X,measures_locations[i])
         G=ot.emd(ot.unif(len(X)),measures_weights[i],M,numItermax=1000000)
         cost=G*M
         L.append(np.sum(cost))
-    tools.save_value(L,'L','barycentre_R/ref/')    
+    tools.save_value(L,'L','barycentre_R/min/')    
 sys.exit()
