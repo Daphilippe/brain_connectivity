@@ -65,4 +65,47 @@ if False:
         display.show_dot(X,title='Barycenter')
         tools.save_fig(str(i+itermax),directory=destination)
 """
+
+"""
+if True:
+    numpy_vars = {}
+    for np_name in glob.glob('barycentre_R/*/99.np[yz]'):
+        numpy_vars[np_name] = np.load(np_name)
+        
+    for X in numpy_vars:
+        L=[]
+        X=np.load(X)
+        #X=np.load(destination+"99.npy")
+        #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+        for i in numpy_vars:
+            M=ot.dist(X,np.load(i))
+            G=ot.emd(ot.unif(len(X)),ot.unif(len(np.load(i))),M,numItermax=1000000)
+            cost=G*M
+            L.append(np.sum(cost))
+        #tools.save_value(L,'L',destination)    
+        #tools.save_value(np.sum(L),'L_sum',destination)
+        print(np.sum(L))
+"""
+
+"""
+if True:
+    numpy_vars = {}
+    for np_name in glob.glob('exp2/'+'*.np[yz]'):
+        numpy_vars[np_name] = np.load(np_name)
+        
+    for X in numpy_vars:
+        L=[]
+        X=np.load(X)
+        #X=np.load(destination+"99.npy")
+        #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+        for i in numpy_vars:
+            M=ot.dist(X,np.load(i))
+            G=ot.emd(ot.unif(len(X)),measures_weights[i],M,numItermax=1000000)
+            cost=G*M
+            L.append(np.sum(cost))
+        #tools.save_value(L,'L',destination)    
+        #tools.save_value(np.sum(L),'L_sum',destination)
+        print(np.sum(L))
+"""
+
 sys.exit()
