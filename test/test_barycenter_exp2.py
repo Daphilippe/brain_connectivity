@@ -140,7 +140,7 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
 # Chemins
 source='../data/R/'
 variables='../variables/R/'
-destination='exp2/'+str(np.random.randint(0,100)*np.random.randint(0,100))
+destination='exp2/'+str(np.random.randint(0,100)*np.random.randint(0,100))+'/'
 
 size=len(source)-1
 
@@ -165,7 +165,7 @@ Nmax=np.shape(measures_locations)[0]
 
 # Initialisation du profil type
 
-if True:# Prend du temps     
+if False:# Prend du temps     
     #Calcul du barycentre itératif
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
