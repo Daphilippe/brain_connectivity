@@ -12,7 +12,7 @@ import sys
 import ot
 
 sys.path.insert(1,'../libs')
-import tools
+import tools,display,barycenter,process
 
 """
 # Translation d'un nuage de point de manière uniforme et comparaison avec distance de Wasserstein
@@ -107,5 +107,56 @@ if True:
         #tools.save_value(np.sum(L),'L_sum',destination)
         print(np.sum(L))
 """
+"""
+from sklearn.cluster import DBSCAN
 
+# Parameters obtained and fixed for DBSCAN clustering of group profiles
+EPS = 3
+ABS = 12000
+NORM_THRESHOLD = ABS / 249897.0
+print(NORM_THRESHOLD)
+
+def estimate_weights(coordinates):
+    unique_coords, inverse, weigth = np.unique(coordinates, return_inverse=True, return_counts=True, axis=0)
+    return unique_coords, inverse, weigth
+
+
+def dbscan_density_clustering(data, eps=EPS, normalised_threshold=NORM_THRESHOLD):
+    unique_data, inverse, weigth = estimate_weights(data)
+    total_weigth = np.sum(weigth)
+    # normalisation to work with densities
+    min_sample = total_weigth * normalised_threshold
+    db = DBSCAN(eps=eps, min_samples=min_sample).fit(X=unique_data, sample_weight=weigth)
+    unique_labels = db.labels_
+    labels = unique_labels[inverse]
+    return labels
+
+
+# Chemins
+source='../data/L/'
+variables='../variables/L/'
+destination='test/L/'
+
+if False:
+    import glob
+    Xsum=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+    _,_,Xsum=tools.estimate_pseudo_density(Xsum)
+    Xsum=Xsum*0
+    
+    numpy_vars = {}
+    for np_name in glob.glob(source+'*.np[yz]'):
+        _,_,X=tools.estimate_pseudo_density(np.load(np_name))
+        Xsum=Xsum+X
+    display.show_map(Xsum, "Group profile registered")
+
+data=np.load('test/L/Xsum.npy')
+data=data/np.sum(data)
+X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
+_,_,data=tools.estimate_pseudo_density(X)
+
+labels=dbscan_density_clustering(data)
+print(np.sum(labels))
+"""
+_,_,Xsum=tools.estimate_pseudo_density(np.load('test/99.npy'))
+display.show_map(Xsum,'Barycenter')
 sys.exit()

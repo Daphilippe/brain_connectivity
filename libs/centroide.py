@@ -124,7 +124,7 @@ def display(data_source='./data/R/',centroide_source='./variables/R/',directory=
         a.title.set_text(str(L_trie[i][:8]))
         plt.xlim(0,100) 
         plt.ylim(0,100)
-        plt.imshow(Img_Xs)
+        plt.imshow(Img_Xs,cmap=plt.cm.magma_r)
     tools.save_fig('Centroide_map',directory)
     
 def matrix(centroide_source='./variables/R/'):

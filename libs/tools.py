@@ -316,7 +316,26 @@ def save_fig(title,directory=''):
     temp=str(directory)+'/'+str(title)+'.png'
     plt.savefig(temp,format="png", transparent=True)
     plt.close()
+    
+def continue2discret(Img_xs,Img_xt,seuil=10e-4):
+    # Normalisation 1
+    Img_xs=Img_xs/np.max(Img_xs)
+    Img_xt=Img_xt/np.max(Img_xt)
+    
+    # Seuillage on ejecte 1% des valeurs les plus petites
+    Img_xs=(Img_xs>seuil)*Img_xs
+    Img_xt=(Img_xt>seuil)*Img_xt
+    
+    # Normalisation 2
+    Img_xs=Img_xs/np.max(Img_xs)
+    Img_xt=Img_xt/np.max(Img_xt)
+    return (Img_xs,Img_xt)
 
+
+"""
+These following functions come from the library :
+    https://github.com/alexpron/article_central_sulcus_connectivity
+"""
 def unnormalized_kernel(points, factor=10):
     """
     Modify the behavior of the gaussian_kde object to
@@ -353,17 +372,3 @@ def estimate_pseudo_density(points, grid_size=101, factor=10):
     new_points = np.vstack([X.ravel(), Y.ravel()])
     Z = np.reshape(kernel(new_points), X.shape)
     return X, Y, Z
-
-def continue2discret(Img_xs,Img_xt,seuil=10e-4):
-    # Normalisation 1
-    Img_xs=Img_xs/np.max(Img_xs)
-    Img_xt=Img_xt/np.max(Img_xt)
-    
-    # Seuillage on ejecte 1% des valeurs les plus petites
-    Img_xs=(Img_xs>seuil)*Img_xs
-    Img_xt=(Img_xt>seuil)*Img_xt
-    
-    # Normalisation 2
-    Img_xs=Img_xs/np.max(Img_xs)
-    Img_xt=Img_xt/np.max(Img_xt)
-    return (Img_xs,Img_xt)

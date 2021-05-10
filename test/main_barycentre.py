@@ -16,9 +16,9 @@ sys.path.insert(1,'../libs')
 import tools, display, barycenter
 
 # Chemins
-source='../data/R/'
-variables='../variables/R/'
-destination='barycentre_R/'
+source='../data/L/'
+variables='../variables/L/'
+destination='barycentre/L/'
 
 size=len(source)-1
 
@@ -48,7 +48,7 @@ else:
     #X_init = np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))  # centroide
     #b=ot.unif(np.shape(X_init)[0])
     #k = int(np.mean([np.shape(i)[0] for i in measures_locations]))# number of Diracs of the barycenter
-    k=int(np.min([np.shape(i)[0] for i in measures_locations]))
+    k=int(np.mean([np.shape(i)[0] for i in measures_locations]))
     X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
     b = np.ones((k,)) / k  # weights of the barycenter (it will not be optimized, only the locations are optimized)
     X=None

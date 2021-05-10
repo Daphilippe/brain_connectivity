@@ -75,7 +75,6 @@ def free_support_barycenter(measures_locations, measures_weights, X_init, b=None
 
         for (measure_locations_i, measure_weights_i, weight_i) in zip(measures_locations, measures_weights,weights.tolist()):
             M_i = ot.dist(X, measure_locations_i)
-            #T_i = ot.sinkhorn(b, measure_weights_i, M_i,reg=10,numItermax=100000) # résolution plus lente
             T_i,_, _, _, result_code = ot.lp.emd_c(b, measure_weights_i, M_i,num2Itermax)
             if result_code!=1:
                 print('EMD old max iteration : '+str(num2Itermax))
