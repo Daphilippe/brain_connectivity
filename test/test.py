@@ -4,7 +4,7 @@
 @date: 21/04/2021
 @version: 1.00
 @Recommandation: Python 3.7
-@revision: 22/04/2021
+@revision: 11/05/2021
 @But: test
 """
 import numpy as np
@@ -67,27 +67,7 @@ if False:
 """
 
 """
-if True:
-    numpy_vars = {}
-    for np_name in glob.glob('barycentre_R/*/99.np[yz]'):
-        numpy_vars[np_name] = np.load(np_name)
-        
-    for X in numpy_vars:
-        L=[]
-        X=np.load(X)
-        #X=np.load(destination+"99.npy")
-        #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
-        for i in numpy_vars:
-            M=ot.dist(X,np.load(i))
-            G=ot.emd(ot.unif(len(X)),ot.unif(len(np.load(i))),M,numItermax=1000000)
-            cost=G*M
-            L.append(np.sum(cost))
-        #tools.save_value(L,'L',destination)    
-        #tools.save_value(np.sum(L),'L_sum',destination)
-        print(np.sum(L))
-"""
-
-"""
+# Calcule des distances par rapport au centroide
 if True:
     numpy_vars = {}
     for np_name in glob.glob('exp2/'+'*.np[yz]'):
@@ -108,6 +88,7 @@ if True:
         print(np.sum(L))
 """
 """
+#Déterminer les maximums locaux par le code d'alex
 from sklearn.cluster import DBSCAN
 
 # Parameters obtained and fixed for DBSCAN clustering of group profiles
@@ -157,6 +138,87 @@ _,_,data=tools.estimate_pseudo_density(X)
 labels=dbscan_density_clustering(data)
 print(np.sum(labels))
 """
-_,_,Xsum=tools.estimate_pseudo_density(np.load('test/99.npy'))
-display.show_map(Xsum,'Barycenter')
+
+"""
+#Information sur les données
+# Chemins
+source='../data/L/'
+variables='../variables/L/'
+destination='test'
+size=len(source)-1
+
+# Changement des données
+measures_locations = []
+measures_weights = []
+L_name=np.load(str(variables)+'L_name.npy')
+L_val=np.load(str(variables)+'L_val.npy')
+L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
+#L_trie=[L_name[i][size:] for i in range(np.shape(L_val)[0])]#minrandom
+# pour 10 sujets
+i=0
+for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
+    np_name=source+np_name
+    measures_locations.append(np.load(np_name))
+    if i>100:
+        break
+    i=i+1
+
+#Min  
+print(int(np.min([np.shape(i)[0] for i in measures_locations])))
+var=L_trie[int(np.argmin([np.shape(i)[0] for i in measures_locations]))]
+title=var[:-4]
+X=np.load(source+var)
+display.show_dot(X,title=title)
+tools.save_fig(title,destination)
+
+_,_,XX=tools.estimate_pseudo_density(X)
+display.show_map(XX,title=title)
+tools.save_fig('map_'+title,destination)
+print(title)
+
+#Max
+var=L_trie[int(np.argmax([np.shape(i)[0] for i in measures_locations]))]
+title=var[:-4]
+X=np.load(source+var)
+display.show_dot(X,title=title)
+tools.save_fig(title,destination)
+
+_,_,XX=tools.estimate_pseudo_density(X)
+display.show_map(XX,title=title)
+tools.save_fig('map_'+title,destination)
+print(title)
+
+# Median
+a=np.shape(measures_locations[np.argsort([np.shape(i)[0] for i in measures_locations])[49]])[0] # median)
+b=np.shape(measures_locations[np.argsort([np.shape(i)[0] for i in measures_locations])[50]])[0] # median)
+print(int((a+b)/2))
+var=L_trie[np.argsort([np.shape(i)[0] for i in measures_locations])[49]]
+title=var[:-4]
+X=np.load(source+var)
+display.show_dot(X,title=title)
+tools.save_fig(title,destination)
+
+_,_,XX=tools.estimate_pseudo_density(X)
+display.show_map(XX,title=title)
+tools.save_fig('map_'+title,destination)
+print(title)
+
+var=L_trie[np.argsort([np.shape(i)[0] for i in measures_locations])[50]]
+title=var[:-4]
+X=np.load(source+var)
+display.show_dot(X,title=title)
+tools.save_fig(title,destination)
+
+_,_,XX=tools.estimate_pseudo_density(X)
+display.show_map(XX,title=title)
+tools.save_fig('map_'+title,destination)
+print(title)
+
+# Moments statistiques
+print(int(np.mean([np.shape(i)[0] for i in measures_locations])))
+print(np.std([np.shape(i)[0] for i in measures_locations]))
+
+from scipy.stats import kurtosis as kurtosis
+print(kurtosis([np.shape(i)[0] for i in measures_locations]))
+"""
 sys.exit()
