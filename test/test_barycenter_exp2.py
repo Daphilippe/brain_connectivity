@@ -206,7 +206,8 @@ if True:
         M=ot.dist(X,measures_locations[i])
         G=ot.emd(ot.unif(len(X)),measures_weights[i],M,numItermax=1000000)
         cost=G*M
-        L.append(np.sum(cost))
+        L.append(np.sum(cost))# <OT,M>
     tools.save_value(L,'L',destination)    
     tools.save_value(np.sum(L),'L_sum',destination)
+    # Sum(W^2_2) => mettre à la racine pour une distance, normaliser par rapport au nombre de sujet si nécessaire
 sys.exit()

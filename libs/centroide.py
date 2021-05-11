@@ -62,12 +62,12 @@ def compute(source='./data/R/',directory='variables/'):
                 #tools.save_value(G,'G_emd_'+str(j[9:17]),directory='variables/'+str(i[9:17]))
                 
                 # Wasserstein matrix
-                cost=G*M  
+                cost=G*M  #<OT,M>
                 
             # update in between step
             L2_name.append(str(j[size:size+8]))
             # Wasserstein distance ^2
-            L2_val.append(np.sum(cost))
+            L2_val.append(np.sum(cost)) # 2-Wasserstein^2
             
         # Save in between step
         tools.save_value(L2_val,'L2_val_'+str(i[size:size+8]),directory+str(i[size:size+8]))
@@ -78,7 +78,7 @@ def compute(source='./data/R/',directory='variables/'):
         Lname.append(i)
         
     # Save final step
-    tools.save_value(Lval,'L_val',directory)
+    tools.save_value(Lval,'L_val',directory)# Sum(W^2_2) => mettre à la racine pour avoir une distance
     tools.save_value(Lname,'L_name',directory) 
     
     # Centroide

@@ -24,9 +24,14 @@ size=len(source)-1
 
 X=np.load('test/L/mean.npy')
 
-mask=np.array([[0,1,0],
+mask1=np.array([[0,1,0],
                [1,1,1],
                [0,1,0]])
+
+
+mask=np.array([[1,1,1],
+                [1,1,1],
+                [1,1,1]])
 
 r=local_maxima(X,selem=mask)
 display.plot_map2(X,r,sub1title='Moyenne',sub2title='Maximum')
