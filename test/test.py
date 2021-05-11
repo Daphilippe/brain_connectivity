@@ -221,4 +221,26 @@ print(np.std([np.shape(i)[0] for i in measures_locations]))
 from scipy.stats import kurtosis as kurtosis
 print(kurtosis([np.shape(i)[0] for i in measures_locations]))
 """
+
+
+"""
+#local maximum
+from skimage import morphology as skm
+mask1=np.array([[0,1,0],
+               [1,1,1],
+               [0,1,0]])
+
+
+mask=np.full((3,3),1)
+mask=np.full((5,5),1)
+#mask=skm.square(5)
+
+print(mask)
+#X=local_maxima(X,selem=mask)
+#display.plot_map2(X,r,sub1title='Moyenne',sub2title='Maximum')
+
+####
+#r=local_maxima(data,selem=mask)
+#display.plot_map2(data,r,sub1title='Barycentre',sub2title='Maximum')
+"""
 sys.exit()

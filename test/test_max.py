@@ -2,17 +2,17 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 11/05/2021
-@version: 1.00
+@version: 1.5
+@revision: 11/05/21
 @Recommandation: Python 3.7
 """
 import numpy as np
 import sys
-import cv2
 
 sys.path.insert(1,'../libs')
-import tools,display
-from skimage.morphology import local_maxima
 
+from skimage.feature import peak_local_max
+    
 import matplotlib.pylab as plt
 
     
@@ -20,26 +20,31 @@ import matplotlib.pylab as plt
 source='../data/L/'
 variables='../variables/L/'
 destination='max'
-size=len(source)-1
 
 X=np.load('test/L/mean.npy')
-
-mask1=np.array([[0,1,0],
-               [1,1,1],
-               [0,1,0]])
-
-
-mask=np.array([[1,1,1],
-                [1,1,1],
-                [1,1,1]])
-
-r=local_maxima(X,selem=mask)
-display.plot_map2(X,r,sub1title='Moyenne',sub2title='Maximum')
-
+min_distance=1
+percent=95
+#coord = peak_local_max((X>np.mean(X))*X, min_distance)
+coord = peak_local_max((X>np.percentile(X, percent))*X, min_distance)
+fig=plt.figure()
+extent = (0, 100, 0, 100)
+plt.imshow(X,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+plt.autoscale(False)
+plt.plot(coord[:, 1], coord[:, 0], 'g.')
+plt.axis('off')
+plt.title('Peak local max mean')
+####
 
 X=np.load('test/L/barycentre.npy')
 _,_,data=tools.estimate_pseudo_density(X)
 data=data/np.max(data)
+#coord = peak_local_max((data>np.mean(data))*data, min_distance)
+coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
 
-r=local_maxima(data,selem=mask)
-display.plot_map2(data,r,sub1title='Barycentre',sub2title='Maximum')
+fig=plt.figure()
+extent = (0, 100, 0, 100)
+plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+plt.autoscale(False)
+plt.plot(coord[:, 1], coord[:, 0], 'g.')
+plt.axis('off')
+plt.title('Peak local max barycenter')
