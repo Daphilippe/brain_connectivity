@@ -8,12 +8,11 @@
 """
 import numpy as np
 import sys
+from skimage.feature import peak_local_max
+import matplotlib.pylab as plt
 
 sys.path.insert(1,'../libs')
-
-from skimage.feature import peak_local_max
-    
-import matplotlib.pylab as plt
+import tools
 
     
 # Chemins
@@ -24,8 +23,8 @@ destination='max'
 X=np.load('test/L/mean.npy')
 min_distance=1
 percent=95
-#coord = peak_local_max((X>np.mean(X))*X, min_distance)
 coord = peak_local_max((X>np.percentile(X, percent))*X, min_distance)
+
 fig=plt.figure()
 extent = (0, 100, 0, 100)
 plt.imshow(X,cmap=plt.cm.magma_r,origin='lower',extent=extent)
@@ -38,7 +37,6 @@ plt.title('Peak local max mean')
 X=np.load('test/L/barycentre.npy')
 _,_,data=tools.estimate_pseudo_density(X)
 data=data/np.max(data)
-#coord = peak_local_max((data>np.mean(data))*data, min_distance)
 coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
 
 fig=plt.figure()
