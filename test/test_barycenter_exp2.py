@@ -138,9 +138,9 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
         tools.save_value(X,str(i+itermax),directory=destination)
         
 # Chemins
-source='../data/R/'
-variables='../variables/R/'
-destination='exp2/'+str(np.random.randint(0,100)*np.random.randint(0,100))+'/'
+source='../data/L/'
+variables='../variables/L/'
+destination='barycentre/L/'
 
 size=len(source)-1
 
@@ -149,9 +149,9 @@ measures_locations = []
 measures_weights = []
 L_name=np.load(str(variables)+'L_name.npy')
 L_val=np.load(str(variables)+'L_val.npy')
-#L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
+L_trie=[L_name[i][size:] for i in np.argsort(L_val)]
 #L_trie=[L_name[i][size:] for i in range(np.shape(L_val)[0])]#minrandom
-L_trie=[L_name[i][size:] for i in random.sample(range(0,100), 100)]
+#L_trie=[L_name[i][size:] for i in random.sample(range(0,100), 100)]
 # pour 10 sujets
 i=0
 for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
@@ -165,7 +165,7 @@ Nmax=np.shape(measures_locations)[0]
 
 # Initialisation du profil type
 
-if False:# Prend du temps     
+if True:# Prend du temps     
     #Calcul du barycentre itératif
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
@@ -189,15 +189,15 @@ if False:# Prend du temps
     t1_stop = process_time() 
     print(t1_stop-t1_start)
     
-    # Sauvegarde des images
-    for np_name in glob.glob(str(destination)+'*.np[yz]'):
-        display.show_dot(np.load(np_name),title='Barycenter')
-        tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+# Sauvegarde des images
+for np_name in glob.glob(str(destination)+'*.np[yz]'):
+    display.show_dot(np.load(np_name),title='Barycenter')
+    tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+
+    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+    display.show_map(Img_xs,title='Barycenter')
+    tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
     
-        _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
-        display.show_map(Img_xs,title='Barycenter')
-        tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
-        
 if True:
     L=[]
     X=np.load(destination+"99.npy")

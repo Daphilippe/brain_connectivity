@@ -34,6 +34,7 @@ plt.axis('off')
 plt.title('Peak local max mean')
 plt.show() 
 
+print(coord)
 ####
 grid_size=101# valeur par défaut
 X=np.load('test/L/barycentre.npy')
@@ -49,3 +50,4 @@ plt.plot(coord[:, 1], coord[:, 0], 'g.')
 plt.axis('off')
 plt.title('Peak local max barycenter')
 plt.show() 
+print(coord)

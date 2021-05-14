@@ -163,7 +163,7 @@ Nmax=np.shape(measures_locations)[0]
 
 # Initialisation du profil type
 
-if True:# Prend du temps     
+if False:# Prend du temps     
     #Calcul du barycentre itératif
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
@@ -187,16 +187,16 @@ if True:# Prend du temps
     t1_stop = process_time() 
     print(t1_stop-t1_start)
     
-    # Sauvegarde des images
-    for np_name in glob.glob(str(destination)+'*.np[yz]'):
-        display.show_dot(np.load(np_name),title='Barycenter')
-        tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
-    
-        _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
-        display.show_map(Img_xs,title='Barycenter')
-        tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
+# Sauvegarde des images
+for np_name in glob.glob(str(destination)+'*.np[yz]'):
+    display.show_dot(np.load(np_name),title='Barycenter')
+    tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+
+    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+    display.show_map(Img_xs,title='Barycenter')
+    tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
         
-if True:
+if False:
     L=[]
     X=np.load(destination+"99.npy")
     #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
