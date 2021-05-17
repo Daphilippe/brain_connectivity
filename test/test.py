@@ -243,4 +243,18 @@ print(mask)
 #r=local_maxima(data,selem=mask)
 #display.plot_map2(data,r,sub1title='Barycentre',sub2title='Maximum')
 """
+
+"""
+#annexe centroide
+val_W22=[np.around(i,2) for i in np.load("../variables/R/L_val.npy")]
+argval_W22=np.argsort(val_W22)
+val_W22=[val_W22[i] for i in argval_W22]
+
+val_W2=[np.around(np.sqrt(i/99),2) for i in val_W22]
+
+name=[i[9:17] for i in np.load("../variables/R/L_name.npy")]
+name=[name[i] for i in argval_W22]
+
+point=[np.shape(np.load('../data/R/'+str(i)+'_connectivity_withHKnob.npy'))[0] for i in name]
+"""
 sys.exit()
