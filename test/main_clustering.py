@@ -23,7 +23,8 @@ data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, pr
 if True: #analyse spectrale
     from numpy import linalg as LA
     df=data.copy()
-    q, eig_v = LA.eig(np.sqrt(d))# on a np.dot(np.dot(v,np.diag(w)),v.transpose())=d
+    dfb= 1-df/np.max(df)# convert distance matrix to similarity matrix
+    q, eig_v = LA.eig(np.sqrt(dfb))# on a np.dot(np.dot(v,np.diag(w)),v.transpose())=d
     # trie croisant
     eigv_or=np.fliplr(eig_v)
     q_or=q[::-1]
