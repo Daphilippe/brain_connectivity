@@ -24,9 +24,29 @@ if True:# clustering hierarchique
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
     
-    for cluster in range(2,101):
-        label=sch.fcluster(dist,cluster,criterion='distance')
-        if len(L)==0:
-            L.append((label,cluster))
-        if np.sum( ( (L[-1][0]-label)!=0)*1 ) > 5:# similitude à 95% du précédent
-            L.append((label,cluster))
+    seuil=0.95
+    for cluster in range(1,101):
+        #label=sch.fcluster(dist,cluster,criterion='distance')
+        label=sch.fcluster(dist,cluster,criterion='maxclust')
+        arg=np.argsort(label)
+        if len(L)==0:#initialisation
+            L.append((arg,cluster))#ajout de la réorganisation des colonnes
+        depassement=0
+        for i in L:
+            similarity=np.sum( ((i[0]-arg)==0)*1 )/(np.shape(df)[0])
+            if  similarity < seuil:# similitude de moins de  seuil% des précédents
+                depassement=depassement+1#comptage des dépassements tolérances
+        if depassement==len(L):# actualisation de la liste
+            L.append((arg,cluster))
+
+
+for i in L:
+    df=data.copy()
+    columns = [df.columns.tolist()[i] for i in list(i[0])]
+    df = df.reindex(columns, axis='columns')
+    df = df.reindex(columns, axis='index')
+    
+    plt.figure()
+    plt.imshow(df)
+    plt.title('Nombre de cluster : '+str(i[1]))
+    plt.show()

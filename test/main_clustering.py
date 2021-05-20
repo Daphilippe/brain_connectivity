@@ -53,8 +53,9 @@ if True:# clustering hierarchique
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
     
-    cluster=3 # 3 clusters principauxs #np.shape(d)[0]
-    label = sch.fcluster(dist,cluster,criterion='distance') # or distance avec un seuille de différence
+    cluster=100 # 3 clusters principauxs #np.shape(d)[0]
+    #label = sch.fcluster(dist,cluster,criterion='distance') # or distance avec un seuille de différence
+    label=sch.fcluster(dist,cluster,criterion='maxclust')
     plt.figure()
     sch.dendrogram(dist)
     plt.show()
