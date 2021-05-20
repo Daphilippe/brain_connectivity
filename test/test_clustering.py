@@ -37,7 +37,7 @@ if True:# clustering hierarchique
             if  similarity < seuil:# similitude de moins de  seuil% des précédents
                 depassement=depassement+1#comptage des dépassements tolérances
         if depassement==len(L):# actualisation de la liste
-            L.append((arg,cluster))
+            L.append((arg,cluster,label))
 
 
 for i in L:
