@@ -18,9 +18,12 @@ d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
-
+if False:
+    plt.figure()
+    plt.imshow(d)
+    plt.show()
 # diagonalisation
-if True: #analyse spectrale
+if False: #analyse spectrale
     from numpy import linalg as LA
     df=data.copy()
     dfb= 1-df/np.max(df)# convert distance matrix to similarity matrix
@@ -45,12 +48,12 @@ if True: #analyse spectrale
     plt.show()
     print(p)
 
-if False:# clustering hierarchique
+if True:# clustering hierarchique
     import scipy.cluster.hierarchy as sch
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
     
-    cluster=100#np.shape(d)[0]
+    cluster=3 # 3 clusters principauxs #np.shape(d)[0]
     label = sch.fcluster(dist,cluster,criterion='distance') # or distance avec un seuille de différence
     plt.figure()
     sch.dendrogram(dist)
