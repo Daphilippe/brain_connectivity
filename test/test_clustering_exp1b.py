@@ -25,7 +25,7 @@ index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-itermax=3
+itermax=10
 cluster=list(range(2,np.shape(d)[0]))
 labels=[]
 score=[]
@@ -41,32 +41,45 @@ for j in range(itermax):
     labels.append(label)#labels de l'ensemble des clusters par tirage
 
 score=[i/itermax for i in score]
-plt.figure()
-plt.plot(cluster, score, 'ro')
-plt.title('Silhouette evolution according to the number of clusters')
-plt.show()
-
-
 label=[]
 for i in cluster:  
     label.append([k[i-2] for k in labels])#label pour un cluster par tirage
     
     
-Labels_majority=[] #label après vote majoritaire pour chaque cluster
-for i in label:
-    majorityvote=[]
-    for j in range(np.shape(d)[0]):
-        majorityvote.append(Counter([k[j] for k in i]).most_common()[0][0])#label pour un cluster par tirage
-    Labels_majority.append(majorityvote)
+plt.figure()
+plt.plot(cluster, score, 'ro')
+plt.title('Silhouette evolution according to the number of clusters')
+plt.show()
 
-for i in list(zip(cluster,Labels_majority)):
-    cluster,label=i
-    df=data.copy()
-    columns = [df.columns.tolist()[i] for i in list(np.argsort(label))]
-    df = df.reindex(columns, axis='columns')
-    df = df.reindex(columns, axis='index')
-    
-    plt.figure()
-    plt.imshow(df)
-    plt.title('Nombre de cluster : ',str(cluster))
-    plt.show()
+if False:        
+    #Calcul des labels par vote majoritaire, certainement à refaire en dehors
+    Labels_majority=[] #label après vote majoritaire pour chaque cluster
+    for i in label:
+        majorityvote=[]
+        for j in range(np.shape(d)[0]):
+            majorityvote.append(Counter([k[j] for k in i]).most_common()[0][0])#label pour un cluster par tirage
+        Labels_majority.append(majorityvote)
+
+
+    for i in list(zip(cluster,Labels_majority)):
+        c,label=i
+        df=data.copy()
+        columns = [df.columns.tolist()[i] for i in list(np.argsort(label))]
+        df = df.reindex(columns, axis='columns')
+        df = df.reindex(columns, axis='index')
+        
+        plt.figure()
+        plt.imshow(df)
+        plt.title('Nombre de cluster : '+str(c))
+        plt.show()
+if True:
+    for l in label[3]:
+        df=data.copy()
+        columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
+        df = df.reindex(columns, axis='columns')
+        df = df.reindex(columns, axis='index')
+        
+        plt.figure()
+        plt.imshow(df)
+        plt.title('Nombre de cluster : 4')
+        plt.show()
