@@ -48,12 +48,12 @@ if False: #acnalyse spectrale
     plt.show()
     print(p)
 
-if False:# clustering hierarchique
+if True:# clustering hierarchique
     import scipy.cluster.hierarchy as sch
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
     
-    cluster=100 # 3 clusters principauxs #np.shape(d)[0]
+    cluster=15 # 3 clusters principauxs #np.shape(d)[0]
     #label = sch.fcluster(dist,cluster,criterion='distance') # or distance avec un seuille de différence
     label=sch.fcluster(dist,cluster,criterion='maxclust')
     plt.figure()

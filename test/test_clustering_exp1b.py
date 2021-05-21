@@ -25,14 +25,14 @@ index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-itermax=10
+itermax=20
 cluster=list(range(2,np.shape(d)[0]))
 labels=[]
 score=[]
 for j in range(itermax):
     label=[]
     for i in cluster:
-        kmedoids=KMedoids(n_clusters=i  ,metric='precomputed',init='k-medoids++').fit(data)
+        kmedoids=KMedoids(n_clusters=i  ,metric='precomputed',init='k-medoids++',max_iter=10000).fit(data)
         label.append(kmedoids.labels_)#label pour un cluster donnée
         if j==0:# first iteration
             score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
@@ -47,11 +47,11 @@ for i in cluster:
     
     
 plt.figure()
-plt.plot(cluster, score, 'ro')
+plt.plot(cluster, score, 'r+')
 plt.title('Silhouette evolution according to the number of clusters')
 plt.show()
 
-if False:        
+if True:        
     #Calcul des labels par vote majoritaire, certainement à refaire en dehors
     Labels_majority=[] #label après vote majoritaire pour chaque cluster
     for i in label:
@@ -72,8 +72,9 @@ if False:
         plt.imshow(df)
         plt.title('Nombre de cluster : '+str(c))
         plt.show()
-if True:
-    for l in label[3]:
+if False:
+    clus=12
+    for l in label[clus-2]:
         df=data.copy()
         columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
         df = df.reindex(columns, axis='columns')
@@ -81,5 +82,6 @@ if True:
         
         plt.figure()
         plt.imshow(df)
-        plt.title('Nombre de cluster : 4')
+        plt.title('Nombre de cluster :'+str(cluster[clus-2]))
         plt.show()
+        break
