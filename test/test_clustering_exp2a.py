@@ -4,7 +4,7 @@
 @date: 20/05/21
 @version: 1.00
 @Recommandation: Python 3.7
-@But: determiner le nb de cluster
+@But: determiner le nb de cluster (clustrering hiearchique)
 """
 import numpy as np
 
@@ -20,6 +20,7 @@ data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, pr
 
 if True:# clustering hierarchique
     L=[]
+    L_label=[]
     import scipy.cluster.hierarchy as sch
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
@@ -31,13 +32,15 @@ if True:# clustering hierarchique
         arg=np.argsort(label)
         if len(L)==0:#initialisation
             L.append((arg,cluster))#ajout de la réorganisation des colonnes
+            L_label.append( (label,cluster))
         depassement=0
         for i in L:
             similarity=np.sum( ((i[0]-arg)==0)*1 )/(np.shape(df)[0])
             if  similarity < seuil:# similitude de moins de  seuil% des précédents
                 depassement=depassement+1#comptage des dépassements tolérances
         if depassement==len(L):# actualisation de la liste
-            L.append((arg,cluster,label))
+            L.append((arg,cluster))
+            L_label.append( (label,cluster))
 
 
 for i in L:

@@ -23,10 +23,10 @@ if False:
     plt.imshow(d)
     plt.show()
 # diagonalisation
-if False: #analyse spectrale
+if False: #acnalyse spectrale
     from numpy import linalg as LA
     df=data.copy()
-    dfb= 1-df/np.max(df)# convert distance matrix to similarity matrix
+    dfb= df/np.max(df)# convert distance matrix to similarity matrix
     q, eig_v = LA.eig(np.sqrt(dfb))# on a np.dot(np.dot(v,np.diag(w)),v.transpose())=d
     # trie croisant
     eigv_or=np.fliplr(eig_v)
@@ -48,7 +48,7 @@ if False: #analyse spectrale
     plt.show()
     print(p)
 
-if True:# clustering hierarchique
+if False:# clustering hierarchique
     import scipy.cluster.hierarchy as sch
     df=data.copy()
     dist=sch.ward(np.sqrt(df))
