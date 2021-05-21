@@ -12,7 +12,7 @@ import sys
 import pandas as pd
 from sklearn_extra.cluster import KMedoids
 from sklearn.metrics import silhouette_score
-
+from collections import Counter
 import matplotlib.pylab as plt
 
 
@@ -33,20 +33,40 @@ for j in range(itermax):
     label=[]
     for i in cluster:
         kmedoids=KMedoids(n_clusters=i  ,metric='precomputed',init='k-medoids++').fit(data)
-        label.append(kmedoids.labels_)
+        label.append(kmedoids.labels_)#label pour un cluster donnée
         if j==0:# first iteration
             score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
         else:
             score[i-2]=score[i-2]+silhouette_score(data,kmedoids.labels_,metric='precomputed')
-    labels.append(label)
+    labels.append(label)#labels de l'ensemble des clusters par tirage
 
 score=[i/itermax for i in score]
-
-label=[]
-for i in cluster:  
-    label.append([k[i-2] for k in labels]
-    
 plt.figure()
 plt.plot(cluster, score, 'ro')
 plt.title('Silhouette evolution according to the number of clusters')
 plt.show()
+
+
+label=[]
+for i in cluster:  
+    label.append([k[i-2] for k in labels])#label pour un cluster par tirage
+    
+    
+Labels_majority=[] #label après vote majoritaire pour chaque cluster
+for i in label:
+    majorityvote=[]
+    for j in range(np.shape(d)[0]):
+        majorityvote.append(Counter([k[j] for k in i]).most_common()[0][0])#label pour un cluster par tirage
+    Labels_majority.append(majorityvote)
+
+for i in list(zip(cluster,Labels_majority)):
+    cluster,label=i
+    df=data.copy()
+    columns = [df.columns.tolist()[i] for i in list(np.argsort(label))]
+    df = df.reindex(columns, axis='columns')
+    df = df.reindex(columns, axis='index')
+    
+    plt.figure()
+    plt.imshow(df)
+    plt.title('Nombre de cluster : ',str(cluster))
+    plt.show()
