@@ -17,7 +17,6 @@ import matplotlib.pylab as plt
 
 
 sys.path.insert(1,'../libs')
-import tools,display,barycenter,process
 
 hemi='L'
 d=np.load('../variables/'+hemi+'/matrix.npy')
@@ -45,14 +44,13 @@ label=[]
 for i in cluster:  
     label.append([k[i-2] for k in labels])#label pour un cluster par tirage
     
-    
 plt.figure()
 plt.plot(cluster, score, 'r+')
 plt.title('Silhouette evolution according to the number of clusters')
 plt.show()
 
-if True:        
-    #Calcul des labels par vote majoritaire, certainement à refaire en dehors
+if False:        
+    #Calcul des labels par vote majoritaire à améliorer si permutation de label équivalent d'une série à l'autre
     Labels_majority=[] #label après vote majoritaire pour chaque cluster
     for i in label:
         majorityvote=[]
@@ -72,7 +70,9 @@ if True:
         plt.imshow(df)
         plt.title('Nombre de cluster : '+str(c))
         plt.show()
-if False:
+        if c>30:
+            break
+if True:
     clus=12
     for l in label[clus-2]:
         df=data.copy()
