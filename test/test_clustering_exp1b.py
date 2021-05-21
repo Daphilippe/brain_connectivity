@@ -28,6 +28,7 @@ itermax=1000
 cluster=list(range(2,30))
 labels=[]
 scores=[]
+arg_scores=[]
 
 for i in cluster:
     label=[]
@@ -36,8 +37,10 @@ for i in cluster:
         kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=1000).fit(data)
         label.append(kmedoids.labels_)#label pour un cluster donnée
         score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
-    labels.append(label)#labels de l'ensemble des tirages pour un cluster 
-    scores.append(np.min(score))
+        
+    median=np.argsort(score)[len(score)//2]
+    labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
+    scores.append(score[median])
 
 score=[i/itermax for i in score]
     
@@ -46,39 +49,15 @@ plt.plot(cluster, scores, 'r+')
 plt.title('Silhouette evolution according to the number of clusters')
 plt.show()
 
-if False:        
-    #Calcul des labels par vote majoritaire à améliorer si permutation de label équivalent d'une série à l'autre
-    Labels_majority=[] #label après vote majoritaire pour chaque cluster
-    for i in labels:
-        majorityvote=[]
-        for j in range(np.shape(d)[0]):
-            majorityvote.append(Counter([k[j] for k in i]).most_common()[0][0])#label par majority vote pour chaque cluster
-        Labels_majority.append(majorityvote)
-
-
-    for i in list(zip(cluster,Labels_majority)):
-        c,label=i
-        df=data.copy()
-        columns = [df.columns.tolist()[i] for i in list(np.argsort(label))]
-        df = df.reindex(columns, axis='columns')
-        df = df.reindex(columns, axis='index')
-        
-        plt.figure()
-        plt.imshow(df)
-        plt.title('Nombre de cluster : '+str(c))
-        plt.show()
-        if c>30:
-            break
 if True:
     clus=12
-    for l in labels[clus-2]:
-        df=data.copy()
-        columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
-        df = df.reindex(columns, axis='columns')
-        df = df.reindex(columns, axis='index')
-        
-        plt.figure()
-        plt.imshow(df)
-        plt.title('Nombre de cluster :'+str(cluster[clus-2]))
-        plt.show()
-        break
+    l=labels[clus]
+    df=data.copy()
+    columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
+    df = df.reindex(columns, axis='columns')
+    df = df.reindex(columns, axis='index')
+    
+    plt.figure()
+    plt.imshow(df)
+    plt.title('Nombre de cluster :'+str(cluster[clus-2]))
+    plt.show()
