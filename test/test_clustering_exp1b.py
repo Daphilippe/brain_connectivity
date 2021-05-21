@@ -25,32 +25,26 @@ index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-itermax=10
-cluster=list(range(2,100))
-label=[]
+itermax=3
+cluster=list(range(2,np.shape(d)[0]))
+labels=[]
 score=[]
-for j in range(10):
+for j in range(itermax):
+    label=[]
     for i in cluster:
-            kmedoids=KMedoids(n_clusters=i  ,metric='precomputed',init='k-medoids++').fit(data)
-            if j!=0:# first iteration
-                label.append(kmedoids.labels_)
-                score.append(silhouette_score(data,label[-1],metric='precomputed'))
-            else:
-                label[i-2]=label[i-2]+kmedoids.labels_# faire des paliers en fonction du nombre de cluster
-                score[i-2]=score[i-2]+silhouette_score(data,kmedoids.labels_,metric='precomputed')
-            
-            if False:
-                df=data.copy()
-                columns = [df.columns.tolist()[i] for i in list(np.argsort(label))]
-                df = df.reindex(columns, axis='columns')
-                df = df.reindex(columns, axis='index')
-                
-                plt.figure()
-                plt.imshow(df)
-                plt.show()
+        kmedoids=KMedoids(n_clusters=i  ,metric='precomputed',init='k-medoids++').fit(data)
+        label.append(kmedoids.labels_)
+        if j==0:# first iteration
+            score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
+        else:
+            score[i-2]=score[i-2]+silhouette_score(data,kmedoids.labels_,metric='precomputed')
+    labels.append(label)
+
 score=[i/itermax for i in score]
-for i in list(zip(cluster,label)):
-    print(i)
+
+label=[]
+for i in cluster:  
+    label.append([k[i-2] for k in labels]
     
 plt.figure()
 plt.plot(cluster, score, 'ro')
