@@ -1,0 +1,2 @@
+itermax=2000
+KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=1000)

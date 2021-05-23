@@ -15,43 +15,80 @@ from sklearn.metrics import silhouette_score
 from collections import Counter
 import matplotlib.pylab as plt
 
+sys.path.insert(1,'../libs')
+import tools
+
 
 sys.path.insert(1,'../libs')
-
+chemin="../variables/clustering/"
 hemi='L'
 d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
-data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
+data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-itermax=1000
-cluster=list(range(2,30))
-labels=[]
-scores=[]
-arg_scores=[]
-
-for i in cluster:
-    label=[]
-    score=[]
-    for j in range(itermax):
-        kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=1000).fit(data)
-        label.append(kmedoids.labels_)#label pour un cluster donnée
-        score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
-        
-    median=np.argsort(score)[len(score)//2]
-    labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
-    scores.append(score[median])
-
-score=[i/itermax for i in score]
+if False:
+    itermax=2000
+    cluster=list(range(2,100))
+    labels=[]
+    scores=[]
+    scores_bis=[]
+    arg_scores=[]
     
-plt.figure()
-plt.plot(cluster, scores, 'r+')
-plt.title('Silhouette evolution according to the number of clusters')
-plt.show()
+    for i in cluster:
+        label=[]
+        score=[]
+        score_bis=[]
+        for j in range(itermax):
+            kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=1000).fit(data)
+            label.append(kmedoids.labels_)#label pour un cluster donnée
+            score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
+            score_bis.append(kmedoids.inertia_)
+            
+        median=np.argsort(score)[len(score)//2]
+        labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
+        scores.append(score[median])
+        scores_bis.append(score_bis[median])
+        
+        if False:
+            mean=np.mean(score)
+            scores.append(mean)
+            scores_bis.append(np.mean(score_bis))
+    
+    score=[i/itermax for i in score]
+        
+    plt.figure()
+    plt.plot(cluster, scores, 'ro')
+    plt.title('Silhouette evolution according to the number of clusters')
+    plt.show()
+    
+    plt.figure()
+    plt.plot(cluster, scores_bis, 'ro')
+    plt.show()
+    
+    tools.save_value(value=cluster, title='cluster',directory=chemin)
+    tools.save_value(value=scores, title='scores',directory=chemin)
+    tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
+    tools.save_value(value=labels, title='labels',directory=chemin)
 
 if True:
-    clus=12
-    l=labels[clus]
+    cluster=np.load('../variables/clustering/cluster.npy')
+    scores=np.load('../variables/clustering/scores.npy')
+    scores_bis=np.load('../variables/clustering/scores_bis.npy')
+    labels=np.load('../variables/clustering/labels.npy')
+    
+    plt.figure()
+    plt.plot(cluster[:30], scores[:30], 'r+')
+    plt.title('Silhouette evolution according to the number of clusters')
+    plt.show()
+    
+    plt.figure()
+    plt.plot(cluster[:30], scores_bis[:30], 'r+')
+    plt.title()
+    plt.show()
+    
+    clus=2
+    l=labels[clus-2]
     df=data.copy()
     columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
     df = df.reindex(columns, axis='columns')
@@ -59,5 +96,5 @@ if True:
     
     plt.figure()
     plt.imshow(df)
-    plt.title('Nombre de cluster :'+str(cluster[clus-2]))
+    plt.title('Number of cluster :'+str(cluster[clus-2]))
     plt.show()

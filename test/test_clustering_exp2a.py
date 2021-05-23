@@ -16,14 +16,14 @@ hemi='L'
 d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
-data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
+data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
 if True:# clustering hierarchique
     L=[]
     L_label=[]
     import scipy.cluster.hierarchy as sch
     df=data.copy()
-    dist=sch.ward(np.sqrt(df))
+    dist=sch.ward(df)
     
     seuil=0.95
     for cluster in range(1,101):
