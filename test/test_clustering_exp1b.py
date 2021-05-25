@@ -50,7 +50,7 @@ if False:
         scores.append(score[median])
         scores_bis.append(score_bis[median])
         
-        if False:
+        if False:#mean au lieu de mediane
             mean=np.mean(score)
             scores.append(mean)
             scores_bis.append(np.mean(score_bis))
@@ -66,10 +66,11 @@ if False:
     plt.plot(cluster, scores_bis, 'ro')
     plt.show()
     
-    tools.save_value(value=cluster, title='cluster',directory=chemin)
-    tools.save_value(value=scores, title='scores',directory=chemin)
-    tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
-    tools.save_value(value=labels, title='labels',directory=chemin)
+    if False:#sauvegarde des données
+        tools.save_value(value=cluster, title='cluster',directory=chemin)
+        tools.save_value(value=scores, title='scores',directory=chemin)
+        tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
+        tools.save_value(value=labels, title='labels',directory=chemin)
 
 if True:
     cluster=np.load('../variables/clustering/cluster.npy')
@@ -83,7 +84,7 @@ if True:
     plt.show()
     
     plt.figure()
-    plt.plot(cluster[:30], scores_bis[:30], 'r+')
+    plt.plot(cluster[:30], [np.sqrt(i) for i in scores_bis[:30]], 'r+')
     plt.title()
     plt.show()
     
