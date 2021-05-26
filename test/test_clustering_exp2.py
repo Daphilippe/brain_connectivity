@@ -12,6 +12,10 @@ import sys
 import pandas as pd
 import matplotlib.pylab as plt
 
+sys.path.insert(1,'../libs')
+import tools as tools
+
+chemin="../variables/clustering/"
 hemi='L'
 d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
@@ -25,14 +29,11 @@ if True:# clustering hierarchique
     df=data.copy()
     dist=sch.ward(df)
     
-    seuil=0.95
-    for cluster in range(1,101):
+    seuil=2
+    for cluster in range(2,101):
         #label=sch.fcluster(dist,cluster,criterion='distance')
         label=sch.fcluster(dist,cluster,criterion='maxclust')
         arg=np.argsort(label)
-        if len(L)==0:#initialisation
-            L.append((arg,cluster))#ajout de la réorganisation des colonnes
-            L_label.append( (label,cluster))
         depassement=0
         for i in L:
             similarity=np.sum( ((i[0]-arg)==0)*1 )/(np.shape(df)[0])
@@ -40,16 +41,18 @@ if True:# clustering hierarchique
                 depassement=depassement+1#comptage des dépassements tolérances
         if depassement==len(L):# actualisation de la liste
             L.append((arg,cluster))
-            L_label.append( (label,cluster))
+            L_label.append(label)
 
-
-for i in L:
-    df=data.copy()
-    columns = [df.columns.tolist()[i] for i in list(i[0])]
-    df = df.reindex(columns, axis='columns')
-    df = df.reindex(columns, axis='index')
-    
-    plt.figure()
-    plt.imshow(df)
-    plt.title('Nombre de cluster : '+str(i[1]))
-    plt.show()
+if False:
+    for i in L:
+        df=data.copy()
+        columns = [df.columns.tolist()[i] for i in list(i[0])]
+        df = df.reindex(columns, axis='columns')
+        df = df.reindex(columns, axis='index')
+        
+        plt.figure()
+        plt.imshow(df)
+        plt.title('Nombre de cluster : '+str(i[1]))
+        plt.show()
+        
+tools.save_value(value=L_label, title='labels_wards',directory=chemin)    
