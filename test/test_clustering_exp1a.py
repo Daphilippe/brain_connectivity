@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 20/04/2021
-@version: 1.75
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 21/04/2021
+@revision: 26/05/2021
 @But: clustering
 """
 import numpy as np
@@ -13,6 +13,10 @@ import sys
 import pandas as pd
 import matplotlib.pylab as plt
 
+sys.path.insert(1,'../libs')
+import tools
+
+chemin="../variables/clustering/"
 hemi='L'
 d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
@@ -69,4 +73,5 @@ if True:# clustering hierarchique
     plt.show()
     
     print(np.argsort(label))
+    tools.save_value(value=label, title='label_wards_clusters_2',directory=chemin)
 sys.exit()
