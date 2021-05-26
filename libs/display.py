@@ -3,7 +3,7 @@
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
 @version: 1.80
-@revision: 11/05/2021
+@revision: 26/05/2021
 @Recommandation: Python 3.7
 
 @list of functions 
@@ -260,20 +260,25 @@ def show_dot(xs,xs_color=None,title=None,size=(10,10)):
     plt.scatter(xs[:,0], xs[:,1],marker = '+', s = 50, color = xs_color)
     plt.title(title)
     
-def show_map(xs,title,size=(10,10)):
+def show_map(xs,title,size=(10,10),cmap=plt.cm.magma_r,origin='lower'):
+    if origin=='lower':
+        extent=(0, 100, 0, 100)
+    else:
+        extent=(0, 100, 100,0)
+        
     fig, ax = plt.subplots(figsize=size)
-    extent = (0, 100, 0, 100)
     ax.set_title(title)
-    ax.imshow(xs,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+    ax.imshow(xs,cmap,origin=origin,extent=extent)
     
     
-def plot_map2(x1,x2,sub1title=None,sub2title=None,size=(10,20)):
+def plot_map2(x1,x2,sub1title=None,sub2title=None,size=(10,20),cmap=plt.cm.magma_r,origin='lower'):
+    if origin=='lower':
+        extent=(0, 100, 0, 100)
+    else:
+        extent=(0, 100, 100,0)
+        
     fig, axs = plt.subplots(1,2,figsize=size)
-    extent = (0, 100, 0, 100)
-    
     axs[0].set_title(sub1title)
-    axs[0].imshow(x1,cmap=plt.cm.magma_r,origin='lower',extent=extent)
-    
-    extent = (0, 100, 0, 100)
+    axs[0].imshow(x1,cmap,origin=origin,extent=extent)
     axs[1].set_title(sub2title)
-    axs[1].imshow(x2,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+    axs[1].imshow(x2,cmap,origin=origin,extent=extent)

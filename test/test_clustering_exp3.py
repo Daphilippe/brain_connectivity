@@ -11,11 +11,10 @@ import numpy as np
 
 import sys
 import pandas as pd
-import matplotlib.pylab as plt
 from sklearn import preprocessing
 
 sys.path.insert(1,'../libs')
-import tools as tools, display
+import tools, display
 
 chemin="../variables/clustering/"
 hemi='L'
@@ -27,30 +26,34 @@ data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 # chargement des données générées
 profils=list(range(len(columns)))
 
-for i in range(2):
+for i in range(0,2):
     cluster=i+2
     a=np.load(chemin+'labels.npy')[i]
     b=np.load(chemin+'labels_wards.npy')[i]
     
-    if cluster!=2:
-        lb = preprocessing.LabelBinarizer()
-        a=lb.fit_transform(a)
-        
-        lb = preprocessing.LabelBinarizer()
-        b=lb.fit_transform(b)
+    lb = preprocessing.LabelBinarizer()
+    a=lb.fit_transform(a)
+    
+    lb = preprocessing.LabelBinarizer()
+    b=lb.fit_transform(b)
 
     #correlation
-    corr=np.corrcoef(a,b)
+    corr=np.corrcoef(a,b,False)
+    print(corr)
 
-if False:#affichage
+if True:#affichage
+    i=1#1
+    a=np.load(chemin+'labels.npy')[i]
+    b=np.load(chemin+'labels_wards.npy')[i]
+    
     df1=data.copy()
     columns = [df1.columns.tolist()[i] for i in list(np.argsort(a))]
     df1 = df1.reindex(columns, axis='columns')
     df1 = df1.reindex(columns, axis='index')
     
     df2=data.copy()
-    columns = [df2.columns.tolist()[i] for i in list(np.argsort(b))]
+    columns = [df2.columns.tolist()[i] for i in list(np.argsort(b))[::-1]]#corr(a,b)
     df2 = df2.reindex(columns, axis='columns')
     df2 = df2.reindex(columns, axis='index')
     
-    display.plot_map2(df1,df2,'K-medoids','Wards linckage')
+    display.plot_map2(df1**2,df2**2,'K-medoids','Wards linckage',cmap=None,origin='upper')

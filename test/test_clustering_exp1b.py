@@ -16,7 +16,7 @@ from sklearn.metrics import silhouette_score
 import matplotlib.pylab as plt
 
 sys.path.insert(1,'../libs')
-import tools
+import tools,display
 
 
 sys.path.insert(1,'../libs')
@@ -67,6 +67,7 @@ if False:
     
     plt.figure()
     plt.plot(cluster, scores_bis, 'ro')
+    plt.title('Elbow score')
     plt.show()
     
     if False:#sauvegarde des données
@@ -90,9 +91,9 @@ if True:
     
     plt.figure()
     plt.plot(cluster[:30], [np.sqrt(i) for i in scores_bis[:30]], 'r+')
-    plt.title()
+    plt.title('Elbow score')
     plt.show()
-    
+
     # réorganisation 
     clus=2
     l=labels[clus-2]
@@ -101,7 +102,4 @@ if True:
     df = df.reindex(columns, axis='columns')
     df = df.reindex(columns, axis='index')
     
-    plt.figure()
-    plt.imshow(df)
-    plt.title('Number of cluster :'+str(cluster[clus-2]))
-    plt.show()
+    display.show_map(df**2,'Number of cluster :'+str(cluster[clus-2]),cmap=None,origin='upper')
