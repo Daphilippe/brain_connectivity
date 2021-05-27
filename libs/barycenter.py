@@ -19,7 +19,7 @@ sys.path.insert(1,'../libs')
 import tools
 
 # calcul barycentre 
-def free_support_barycenter(measures_locations, measures_weights, X_init, b=None, weights=None, numItermax=1000, stopThr=1e-7,num2Itermax=102400):
+def free_support_barycenter(measures_locations, measures_weights, X_init, b=None, weights=None, numItermax=1000, stopThr=0.01,num2Itermax=102400):
     """
     Take from : ot.lp.free_support_barycenter
     

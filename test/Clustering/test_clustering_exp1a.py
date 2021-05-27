@@ -13,7 +13,7 @@ import sys
 import pandas as pd
 import matplotlib.pylab as plt
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools,display
 
 chemin="../variables/clustering/"
