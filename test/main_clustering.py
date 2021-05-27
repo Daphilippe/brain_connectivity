@@ -54,7 +54,7 @@ b=np.ones(np.shape(X_init)[0])/np.shape(X_init)[0]
 
 k='k2'
 # Calcul et sauvegarde donnée
-if True:
+if False:
     X0=barycenter.iterative_barycenter(None,X_init,b,c0,w0,save=False,Nmax=len(w0))
     tools.save_value(X0, 'X0',source2+'barycentre_'+k)
     X1=barycenter.iterative_barycenter(None,X_init,b,c1,w1,save=False,Nmax=len(w1))
