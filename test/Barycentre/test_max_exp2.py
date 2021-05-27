@@ -2,8 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 14/05/2021
-@version: 1.00
+@version: 1.25
 @Recommandation: Python 3.7
+@Révision : 28/05/21
 @But: comparaison barycentre avancées
 """
 import numpy as np
@@ -18,7 +19,7 @@ import tools, display
 
 source='barycentre/R/'
 variables='../variables/R/'
-destination='local_max/R/'
+destination='../variables/local_max/'
 size=len(source)
 
 # Changement des données
@@ -58,7 +59,7 @@ if False:
     dataX=dataX/np.max(dataX)
     tools.save_value(dataX,'mean_R',destination)
 if True:
-    destination='local_max/'    
+    destination='../variables/local_max/'    
     data=np.load(destination+'mean_R.npy')    
     coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
     tools.save_value(coord,'coord_R',destination)

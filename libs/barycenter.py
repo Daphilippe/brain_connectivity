@@ -88,7 +88,7 @@ def free_support_barycenter(measures_locations, measures_weights, X_init, b=None
     return X
 
 # calcul barycentre sujet itératif
-def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100,itermax=0,stopThr=0.01,num2Itermax=102400,destination='temp/'):
+def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100,itermax=0,stopThr=0.01,num2Itermax=102400,destination='temp/',save=True):
     """ Compute barycenter profil by profil
     
 
@@ -134,4 +134,7 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
             L_w=[b,measures_weights[i+itermax]]
             X = free_support_barycenter(L_loc, L_w,X_init,b,weights=np.array([(i+itermax)/(i+itermax+1),1/(i+itermax+1)]),stopThr=stopThr,num2Itermax=num2Itermax)  
         # Sauvegarde
-        tools.save_value(X,str(i+itermax),directory=destination)
+        if save:
+            tools.save_value(X,str(i+itermax),directory=destination)
+    if not(save):
+        return X

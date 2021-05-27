@@ -20,17 +20,17 @@ import tools,display
 
 
 sys.path.insert(1,'../libs')
-chemin="../variables/clustering/"
-hemi='L'
+hemi='R'
+chemin="../variables/clustering/"+hemi
 d=np.load('../variables/'+hemi+'/matrix.npy')
 index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-if False:
+if True:
     # détermination de elbows et silhouette score + labels + lissage en prenant la valeur median
-    itermax=2000
-    cluster=list(range(2,100))
+    itermax=1
+    cluster=list(range(2,4))
     labels=[]
     scores=[]
     scores_bis=[]
@@ -70,7 +70,7 @@ if False:
     plt.title('Elbow score')
     plt.show()
     
-    if False:#sauvegarde des données
+    if True:#sauvegarde des données
         tools.save_value(value=cluster, title='cluster',directory=chemin)
         tools.save_value(value=scores, title='scores',directory=chemin)
         tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
@@ -78,10 +78,10 @@ if False:
 
 if True:
     # chargement des données déjà générées
-    cluster=np.load('../variables/clustering/cluster.npy')
-    scores=np.load('../variables/clustering/scores.npy')
-    scores_bis=np.load('../variables/clustering/scores_bis.npy')
-    labels=np.load('../variables/clustering/labels.npy')
+    cluster=np.load(chemin+'/cluster.npy')
+    scores=np.load(chemin+'/scores.npy')
+    scores_bis=np.load(chemin+'/scores_bis.npy')
+    labels=np.load(chemin+'/labels.npy')
     
     # affichage
     plt.figure()
