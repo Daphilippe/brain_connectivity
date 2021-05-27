@@ -10,14 +10,12 @@
 import numpy as np
 
 import sys
-import pandas as pd
-from sklearn import preprocessing
 
 sys.path.insert(1,'../libs')
 import tools, display, barycenter
 
 # Directory
-hemi='L'
+hemi='R'
 source='../data/'+hemi+'/'
 source2="../variables/clustering/"+hemi+"/"
 
@@ -30,7 +28,7 @@ if not(all(columns==index)):#controle intégrité matrice distance
 # Load    
 cluster=np.load(source2+'cluster.npy')
 labels=np.load(source2+'labels.npy')
-k=labels[0] #labels[1]
+k=labels[1] #labels[1]
 
 # Initialisation variables
 c0=[]
@@ -39,7 +37,7 @@ c1=[]
 w1=[]
 c2=[]
 w2=[]
-nb_dot=2000
+nb_dot=500# mettre idéalement à 2000, ici pour accélérer les calculs aucunes incidences sur les résultats
 for i in range(len(k)):
     if k[i]==0:
         c0.append(np.load(source+index[i]+'_connectivity_withHKnob.npy'))
@@ -54,28 +52,27 @@ for i in range(len(k)):
 X_init = np.random.normal(0., 1., (nb_dot, 2))#2087 pour R nombre de point moyen de l'ensemble des profils     
 b=np.ones(np.shape(X_init)[0])/np.shape(X_init)[0]
 
-
+k='k2'
 # Calcul et sauvegarde donnée
-if False:
-    X0=barycenter.iterative_barycenter(None,X_init,b,c0,w0,save=False,Nmax=len(w0))
-    tools.save_value(X0, 'X0',source2+'barycentre_k2')
-    X1=barycenter.iterative_barycenter(None,X_init,b,c1,w1,save=False,Nmax=len(w1))
-    tools.save_value(X1, 'X1',source2+'barycentre_k2')
-    X2=barycenter.iterative_barycenter(None,X_init,b,c2,w2,save=False,Nmax=len(w2))
-    tools.save_value(X2, 'X2',source2+'barycentre_k2')
 if True:
-    k='k2'
+    X0=barycenter.iterative_barycenter(None,X_init,b,c0,w0,save=False,Nmax=len(w0))
+    tools.save_value(X0, 'X0',source2+'barycentre_'+k)
+    X1=barycenter.iterative_barycenter(None,X_init,b,c1,w1,save=False,Nmax=len(w1))
+    tools.save_value(X1, 'X1',source2+'barycentre_'+k)
+    X2=barycenter.iterative_barycenter(None,X_init,b,c2,w2,save=False,Nmax=len(w2))
+    tools.save_value(X2, 'X2',source2+'barycentre_'+k)
+if True:
     X0=np.load(source2+'barycentre_'+k+'/X0.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X0)
     display.show_map(Img_xs,title='Barycenter cluster 0 - L')
-    tools.save_fig('Barycenter cluster 0 - L', source2+'barycentre_'+k+'/')
+    tools.save_fig('Barycenter cluster 0 - '+hemi, source2+'barycentre_'+k+'/')
     
     X1=np.load(source2+'barycentre_'+k+'/X1.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X1)
     display.show_map(Img_xs,title='Barycenter cluster 1 - L')
-    tools.save_fig('Barycenter cluster 1 - L', source2+'barycentre_'+k+'/')
+    tools.save_fig('Barycenter cluster 1 - '+hemi, source2+'barycentre_'+k+'/')
         
     X2=np.load(source2+'barycentre_'+k+'/X2.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X2)
     display.show_map(Img_xs,title='Barycenter cluster 2 - L')
-    tools.save_fig('Barycenter cluster 2 - L', source2+'barycentre_'+k+'/')
+    tools.save_fig('Barycenter cluster 2 - '+hemi, source2+'barycentre_'+k+'/')
