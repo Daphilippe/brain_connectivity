@@ -2,8 +2,8 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
-@version: 1.75
-@revision: 21/04/2021
+@version: 2.00
+@revision: 28/05/2021
 @Recommandation: Python 3.7
 
 @list of functions 
@@ -20,6 +20,7 @@ import tools
 
 import numpy as np
 import matplotlib.pylab as plt
+from skimage.feature import peak_local_max
 
 def auto_affichage_discret(xs,xt,M,G,pos,weight=None,serie=''):
     """ Automatisation display processus for dots
@@ -197,3 +198,19 @@ def automatisation_discret(xs,a,xt,b,M,G,racine,affixe):
     pos1=np.load(str(racine)+'/'+str(affixe)+'/pos1_'+str(affixe)+'.npy')
     w1=np.load(str(racine)+'/'+str(affixe)+'/w1_'+str(affixe)+'.npy')
     auto_affichage_discret(xs,xt,M,G,pos1,w1,str(racine)+'/'+str(affixe)+'/images') 
+    
+def auto_max(X0,titre,save_title,destination,min_distance=1,percent=90,grid_size=101):
+    _,_,Img_xs=tools.estimate_pseudo_density(X0)
+    data=Img_xs/np.max(Img_xs)
+
+    coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
+    tools.save_value(coord,'coord_'+save_title,destination)
+    
+    plt.figure()
+    extent = (0,grid_size-1 , 0,grid_size-1)
+    plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+    plt.autoscale(False)
+    plt.plot(coord[:, 1], coord[:, 0], 'g.')
+    plt.axis('off')
+    plt.title(titre)
+    tools.save_fig(save_title,destination)

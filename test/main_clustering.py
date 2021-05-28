@@ -2,7 +2,7 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 27/05/2021
-@version: 1.00
+@version: 1.25
 @Recommandation: Python 3.7
 @But: KMedoids : calculer le barycentre associée à chaque k clusters
 """
@@ -10,28 +10,14 @@
 import numpy as np
 
 import sys
-from skimage.feature import peak_local_max
+
 import matplotlib.pylab as plt
 
 sys.path.insert(1,'../libs')
 
-import tools, display, barycenter
+import tools, display, barycenter,process
 
-def auto_max(X0,hemi,X,destination,min_distance=1,percent=90,grid_size=101):
-    _,_,Img_xs=tools.estimate_pseudo_density(X0)
-    data=Img_xs/np.max(Img_xs)
 
-    coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
-    tools.save_value(coord,'coord_'+hemi+X,destination)
-    
-    plt.figure()
-    extent = (0,grid_size-1 , 0,grid_size-1)
-    plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
-    plt.autoscale(False)
-    plt.plot(coord[:, 1], coord[:, 0], 'g.')
-    plt.axis('off')
-    plt.title(hemi+'hemisphere')
-    tools.save_fig('mean_'+hemi+X,destination)
 
 # Directory
 hemi='L'
@@ -80,42 +66,47 @@ if False:
     tools.save_value(X1, 'X1',source2+'barycentre_'+k)
     X2=barycenter.iterative_barycenter(None,X_init,b,c2,w2,save=False,Nmax=len(w2))
     tools.save_value(X2, 'X2',source2+'barycentre_'+k)
+    
 if False:#barycentre des sous groupes
     X0=np.load(source2+'barycentre_'+k+'/X0.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X0)
-    #display.show_map(Img_xs,title='Barycenter cluster 0 - L')
-    #tools.save_fig('Barycenter cluster 0 - '+hemi, source2+'barycentre_'+k+'/')
+    display.show_map(Img_xs,title='Barycenter cluster 0 - L')
+    tools.save_fig('Barycenter cluster 0 - '+hemi, source2+'barycentre_'+k+'/')
     
     X1=np.load(source2+'barycentre_'+k+'/X1.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X1)
-    #display.show_map(Img_xs,title='Barycenter cluster 1 - L')
-    #tools.save_fig('Barycenter cluster 1 - '+hemi, source2+'barycentre_'+k+'/')
+    display.show_map(Img_xs,title='Barycenter cluster 1 - L')
+    tools.save_fig('Barycenter cluster 1 - '+hemi, source2+'barycentre_'+k+'/')
         
     X2=np.load(source2+'barycentre_'+k+'/X2.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X2)
-    #display.show_map(Img_xs,title='Barycenter cluster 2 - L')
-    #tools.save_fig('Barycenter cluster 2 - '+hemi, source2+'barycentre_'+k+'/')
+    display.show_map(Img_xs,title='Barycenter cluster 2 - L')
+    tools.save_fig('Barycenter cluster 2 - '+hemi, source2+'barycentre_'+k+'/')
     
 if True:#maximum locaux
     destination = source2+'barycentre_'+k+'/'
     min_distance=1
     percent=90#seuillage des valeurs
     grid_size=101
-
+    titre=hemi+'_hemisphere'
+    
     #cluster 0
     X='X0'
+    save_title='max_'+hemi+'_'+X
     X0=np.load(source2+'barycentre_'+k+'/X0.npy')
     
-    auto_max(X0,hemi,X,destination,min_distance=1,percent=90,grid_size=101)
+    process.auto_max(X0,titre,save_title,destination,min_distance=1,percent=90,grid_size=101)
     
     # cluster 1
     X='X1'
+    save_title='max_'+hemi+'_'+X
     X1=np.load(source2+'barycentre_'+k+'/X1.npy')
-    auto_max(X1,hemi,X,destination,min_distance=1,percent=90,grid_size=101)
+    process.auto_max(X1,titre,save_title,destination,min_distance=1,percent=90,grid_size=101)
         
     #cluster 2
     X='X2'
+    save_title='max_'+hemi+'_'+X
     X2=np.load(source2+'barycentre_'+k+'/X2.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X2)
-    auto_max(X2,hemi,X,destination,min_distance=1,percent=90,grid_size=101)
+    process.auto_max(X2,titre,save_title,destination,min_distance=1,percent=90,grid_size=101)
     
