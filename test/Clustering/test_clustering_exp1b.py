@@ -39,7 +39,6 @@ if True:
         score_bis=10E10
         for j in range(itermax):# on répète l'expérience
             kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=10).fit(data)
-            
             if score_bis>kmedoids.inertia_:
                 score_bis=kmedoids.inertia_
                 label=kmedoids.labels_#label pour un cluster donnée
