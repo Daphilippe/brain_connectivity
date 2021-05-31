@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 21/05/2021
-@version: 1.75
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 26/05/2021
+@revision: 31/05/2021
 @But: KMedoids : déterminer le meilleur k
 """
 import numpy as np
@@ -27,45 +27,28 @@ index=np.load('../../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load('../../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-itermax=1000
+itermax=5000
 if True:
     # détermination de elbows et silhouette score + labels + lissage en prenant la valeur median
-    itermax=1000
-    cluster=list(range(2,20))
+    cluster=list(range(2,10))
     labels=[]
     scores=[]
     scores_bis=[]
-    arg_scores=[]
     
     for i in cluster:# pour chaque cluster
-        label=[]
-        score=[]
-        score_bis=[]
+        score_bis=10E10
         for j in range(itermax):# on répète l'expérience
-            kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=10000).fit(data)
-            label.append(kmedoids.labels_)#label pour un cluster donnée
-            score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
-            score_bis.append(kmedoids.inertia_)
-        
-        # sauvegarde du label représentatif
-        if False:
-            median=np.argsort(score)[len(score)//2]
-            labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
-            scores.append(score[median])
-            scores_bis.append(score_bis[median])
-        
-        if False:#mean au lieu de mediane
-            mean=np.mean(score)
-            scores.append(mean)
-            scores_bis.append(np.mean(score_bis))
+            kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=10).fit(data)
             
-        if True:#minus au lieu de mediane
-            minus=np.argmin(score)
-            labels.append(label[minus])#labels de l'ensemble des tirages pour un cluster 
-            scores.append(score[minus])
-            scores_bis.append(score_bis[minus])
+            if score_bis>kmedoids.inertia_:
+                score_bis=kmedoids.inertia_
+                label=kmedoids.labels_#label pour un cluster donnée
+                score=silhouette_score(data,kmedoids.labels_,metric='precomputed')
+        labels.append(label)#labels de l'ensemble des tirages pour un cluster 
+        scores.append(score)
+        scores_bis.append(score_bis)
     
-    if False:#sauvegarde des données
+    if True:#sauvegarde des données
         tools.save_value(value=cluster, title='cluster',directory=chemin)
         tools.save_value(value=scores, title='scores',directory=chemin)
         tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
@@ -73,16 +56,15 @@ if True:
 
 if True:
     # chargement des données déjà générées
-    if False:
-        cluster=np.load(chemin+'/cluster.npy')
-        scores=np.load(chemin+'/scores.npy')
-        scores_bis=np.load(chemin+'/scores_bis.npy')
-        labels=np.load(chemin+'/labels.npy')
+    cluster=np.load(chemin+'/cluster.npy')
+    scores=np.load(chemin+'/scores.npy')
+    scores_bis=np.load(chemin+'/scores_bis.npy')
+    labels=np.load(chemin+'/labels.npy')
     
     # affichage
     plt.figure()
     plt.plot(cluster[:30], scores[:30], 'r+')
-    plt.title('Silhouette evolution according to the number of clusters - iter: '+str(itermax))
+    plt.title('Silhouette score - iter: '+str(itermax))
     plt.show()
     
     plt.figure()
