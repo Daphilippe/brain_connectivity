@@ -8,16 +8,11 @@
 """
 
 import numpy as np
-
 import sys
-
 import matplotlib.pylab as plt
-
 sys.path.insert(1,'../libs')
 
 import tools, display, barycenter,process
-
-
 
 # Directory
 hemi='L'

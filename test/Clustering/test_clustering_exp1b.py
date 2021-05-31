@@ -15,22 +15,23 @@ from sklearn_extra.cluster import KMedoids
 from sklearn.metrics import silhouette_score
 import matplotlib.pylab as plt
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools,display
 
 
 sys.path.insert(1,'../libs')
-hemi='R'
-chemin="../variables/clustering/"+hemi
-d=np.load('../variables/'+hemi+'/matrix.npy')
-index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
-columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
+hemi='L'
+chemin="../../variables/clustering/"+hemi
+d=np.load('../../variables/'+hemi+'/matrix.npy')
+index=np.load('../../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
+columns=np.load('../../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
+itermax=1000
 if True:
     # détermination de elbows et silhouette score + labels + lissage en prenant la valeur median
-    itermax=1
-    cluster=list(range(2,4))
+    itermax=1000
+    cluster=list(range(2,20))
     labels=[]
     scores=[]
     scores_bis=[]
@@ -41,36 +42,30 @@ if True:
         score=[]
         score_bis=[]
         for j in range(itermax):# on répète l'expérience
-            kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=1000).fit(data)
+            kmedoids=KMedoids(n_clusters=i,metric='precomputed',init='k-medoids++',max_iter=10000).fit(data)
             label.append(kmedoids.labels_)#label pour un cluster donnée
             score.append(silhouette_score(data,kmedoids.labels_,metric='precomputed'))
             score_bis.append(kmedoids.inertia_)
         
         # sauvegarde du label représentatif
-        median=np.argsort(score)[len(score)//2]
-        labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
-        scores.append(score[median])
-        scores_bis.append(score_bis[median])
+        if False:
+            median=np.argsort(score)[len(score)//2]
+            labels.append(label[median])#labels de l'ensemble des tirages pour un cluster 
+            scores.append(score[median])
+            scores_bis.append(score_bis[median])
         
         if False:#mean au lieu de mediane
             mean=np.mean(score)
             scores.append(mean)
             scores_bis.append(np.mean(score_bis))
+            
+        if True:#minus au lieu de mediane
+            minus=np.argmin(score)
+            labels.append(label[minus])#labels de l'ensemble des tirages pour un cluster 
+            scores.append(score[minus])
+            scores_bis.append(score_bis[minus])
     
-    score=[i/itermax for i in score]
-    
-    #affichage    
-    plt.figure()
-    plt.plot(cluster, scores, 'ro')
-    plt.title('Silhouette evolution according to the number of clusters')
-    plt.show()
-    
-    plt.figure()
-    plt.plot(cluster, scores_bis, 'ro')
-    plt.title('Elbow score')
-    plt.show()
-    
-    if True:#sauvegarde des données
+    if False:#sauvegarde des données
         tools.save_value(value=cluster, title='cluster',directory=chemin)
         tools.save_value(value=scores, title='scores',directory=chemin)
         tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)
@@ -78,20 +73,21 @@ if True:
 
 if True:
     # chargement des données déjà générées
-    cluster=np.load(chemin+'/cluster.npy')
-    scores=np.load(chemin+'/scores.npy')
-    scores_bis=np.load(chemin+'/scores_bis.npy')
-    labels=np.load(chemin+'/labels.npy')
+    if False:
+        cluster=np.load(chemin+'/cluster.npy')
+        scores=np.load(chemin+'/scores.npy')
+        scores_bis=np.load(chemin+'/scores_bis.npy')
+        labels=np.load(chemin+'/labels.npy')
     
     # affichage
     plt.figure()
     plt.plot(cluster[:30], scores[:30], 'r+')
-    plt.title('Silhouette evolution according to the number of clusters')
+    plt.title('Silhouette evolution according to the number of clusters - iter: '+str(itermax))
     plt.show()
     
     plt.figure()
     plt.plot(cluster[:30], [np.sqrt(i) for i in scores_bis[:30]], 'r+')
-    plt.title('Elbow score')
+    plt.title('Elbow score - iter: '+str(itermax))
     plt.show()
 
     # réorganisation 
