@@ -28,7 +28,7 @@ columns=np.load('../../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
 itermax=5000
-if True:
+if False:
     # détermination de elbows et silhouette score + labels + lissage en prenant la valeur median
     cluster=list(range(2,10))
     labels=[]
@@ -63,20 +63,22 @@ if True:
     # affichage
     plt.figure()
     plt.plot(cluster[:30], scores[:30], 'r+')
-    plt.title('Silhouette score - iter: '+str(itermax))
-    plt.show()
+    plt.title('Silhouette score - '+hemi)
+    tools.save_fig('silhouette_'+hemi,chemin)
     
     plt.figure()
     plt.plot(cluster[:30], [np.sqrt(i) for i in scores_bis[:30]], 'r+')
-    plt.title('Elbow score - iter: '+str(itermax))
-    plt.show()
+    plt.title('Elbow score - '+hemi)
+    tools.save_fig('elbow_'+hemi,chemin)
 
-    # réorganisation 
-    clus=2
-    l=labels[clus-2]
-    df=data.copy()
-    columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
-    df = df.reindex(columns, axis='columns')
-    df = df.reindex(columns, axis='index')
-    
-    display.show_map(df**2,'Number of cluster :'+str(cluster[clus-2]),cmap=None,origin='upper')
+    # réorganisation
+if True:
+    clus=1
+    for l in labels:
+        clus=clus+1
+        df=data.copy()
+        columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
+        df = df.reindex(columns, axis='columns')
+        df = df.reindex(columns, axis='index')
+        display.show_map(df**2,'Number of cluster: '+str(cluster[clus-2]),cmap=None,origin='upper')
+        tools.save_fig('reorg_'+str(clus)+'_'+hemi,chemin+'/matrix')

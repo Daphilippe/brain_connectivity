@@ -9,10 +9,9 @@
 
 import numpy as np
 import sys
-import matplotlib.pylab as plt
 sys.path.insert(1,'../libs')
 
-import tools, display, barycenter,process
+import tools, display, barycenter, process
 
 # Directory
 hemi='L'
@@ -52,7 +51,7 @@ for i in range(len(k)):
 X_init = np.random.normal(0., 1., (nb_dot, 2))#2087 pour R nombre de point moyen de l'ensemble des profils     
 b=np.ones(np.shape(X_init)[0])/np.shape(X_init)[0]
 
-k='k2'
+k='k3'
 # Calcul et sauvegarde donnée
 if False:
     X0=barycenter.iterative_barycenter(None,X_init,b,c0,w0,save=False,Nmax=len(w0))
@@ -65,17 +64,17 @@ if False:
 if False:#barycentre des sous groupes
     X0=np.load(source2+'barycentre_'+k+'/X0.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X0)
-    display.show_map(Img_xs,title='Barycenter cluster 0 - L')
+    display.show_map(Img_xs,title='Barycenter cluster 0 - '+hemi)
     tools.save_fig('Barycenter cluster 0 - '+hemi, source2+'barycentre_'+k+'/')
     
     X1=np.load(source2+'barycentre_'+k+'/X1.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X1)
-    display.show_map(Img_xs,title='Barycenter cluster 1 - L')
+    display.show_map(Img_xs,title='Barycenter cluster 1 - '+hemi)
     tools.save_fig('Barycenter cluster 1 - '+hemi, source2+'barycentre_'+k+'/')
         
     X2=np.load(source2+'barycentre_'+k+'/X2.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X2)
-    display.show_map(Img_xs,title='Barycenter cluster 2 - L')
+    display.show_map(Img_xs,title='Barycenter cluster 2 - '+hemi)
     tools.save_fig('Barycenter cluster 2 - '+hemi, source2+'barycentre_'+k+'/')
     
 if True:#maximum locaux
@@ -83,23 +82,25 @@ if True:#maximum locaux
     min_distance=1
     percent=90#seuillage des valeurs
     grid_size=101
-    titre=hemi+'_hemisphere'
     
     #cluster 0
-    X='X0'
+    X='0'
+    titre='Cluster: '+X+' - '+hemi
     save_title='max_'+hemi+'_'+X
     X0=np.load(source2+'barycentre_'+k+'/X0.npy')
     
     process.auto_max(X0,titre,save_title,destination,min_distance=1,percent=90,grid_size=101)
     
     # cluster 1
-    X='X1'
+    X='1'
+    titre='Cluster: '+X+' - '+hemi
     save_title='max_'+hemi+'_'+X
     X1=np.load(source2+'barycentre_'+k+'/X1.npy')
     process.auto_max(X1,titre,save_title,destination,min_distance=1,percent=90,grid_size=101)
         
     #cluster 2
-    X='X2'
+    X='2'
+    titre='Cluster: '+X+' - '+hemi
     save_title='max_'+hemi+'_'+X
     X2=np.load(source2+'barycentre_'+k+'/X2.npy')
     _,_,Img_xs=tools.estimate_pseudo_density(X2)
