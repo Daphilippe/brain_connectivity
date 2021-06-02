@@ -4,6 +4,7 @@
 @date: 27/05/2021
 @version: 1.25
 @Recommandation: Python 3.7
+@revision 02/06/21
 @But: KMedoids : calculer le barycentre associée à chaque k clusters
 """
 
