@@ -48,7 +48,7 @@ if True:# Isomap 1 dimension, 2 voisins
     #plt.legend()
     plt.show()
     
-if False:# Isomap 2 dimension, 2 voisins
+if True:# Isomap 2 dimension, 2 voisins
     iso=Isomap(n_neighbors=2,n_components=2,metric='precomputed')
     X_transformed=iso.fit_transform(data)
     
