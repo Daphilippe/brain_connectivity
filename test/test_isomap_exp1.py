@@ -4,7 +4,7 @@
 @date: 27/05/2021
 @version: 1.25
 @Recommandation: Python 3.7
-@revision 02/06/21
+@revision 03/06/21
 @But : Afficher les données en respectant la géodésie des données
 """
 import numpy as np
@@ -30,13 +30,11 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-
-
-clus=3
+clus=4
 cluster=np.load(source2+'/labels.npy')[clus-2]#labels des différents clusters
 
-if True:# Isomap 1 dimension, 2 voisins
-    iso=Isomap(n_neighbors=2,n_components=1,metric='precomputed')
+if False:# Isomap 1 dimension, 4 voisins
+    iso=Isomap(n_neighbors=4,n_components=1,metric='precomputed')
     X_transformed=iso.fit_transform(data) 
     
     plt.figure(figsize=(20,20))
@@ -48,8 +46,8 @@ if True:# Isomap 1 dimension, 2 voisins
     #plt.legend()
     plt.show()
     
-if True:# Isomap 2 dimension, 2 voisins
-    iso=Isomap(n_neighbors=2,n_components=2,metric='precomputed')
+if False:# Isomap 2 dimension, 3 voisins
+    iso=Isomap(n_neighbors=3,n_components=2,metric='precomputed')
     X_transformed=iso.fit_transform(data)
     
     plt.figure(figsize=(10,10))
@@ -58,3 +56,25 @@ if True:# Isomap 2 dimension, 2 voisins
         plt.annotate(i[0], i[1],fontsize=8)
     #plt.legend()
     plt.show()
+    
+    
+from IPython.display import HTML
+from matplotlib import animation
+def animate(frame):
+  ax.view_init(20, frame)
+  plt.pause(.001)
+  return frame
+
+    
+if True:# Isomap 3 dimension, 2 voisins
+    iso=Isomap(n_neighbors=2,n_components=3,metric='precomputed')
+    X_transformed=iso.fit_transform(data)
+    
+    fig=plt.figure(figsize=(10,10))
+    ax = plt.axes(projection='3d')
+    ax.scatter3D([i[0] for i in X_transformed],[i[1] for i in X_transformed],[i[2] for i in X_transformed],marker='+',c=cluster)
+    if False:
+        for i in list(zip(index,X_transformed)):
+            ax.text(i[1][0],i[1][1],i[1][2],'%s' % (str(i[0])),fontsize=7)    
+    anim = animation.FuncAnimation(fig, animate, frames=120, interval=120)
+    
