@@ -30,43 +30,39 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-clus=4
+clus=9
 cluster= np.load(source2+'/labels.npy')[clus-2]
 
 # corrélation intrinsèque
-temp=[]
-if True:# Isomap 1 dimension, 2 voisins
+if False:# Isomap 1 dimension, 2 voisins
+    temp=[]
     for k in range(2,20):
         iso=Isomap(n_neighbors=k,n_components=1,metric='precomputed')
         X_transformed=iso.fit_transform(data)   
         [a]=np.argsort(X_transformed,0).T
         temp.append(a.T)     
-a=pd.DataFrame(np.array(temp)).T.corr()
+    print(np.sum(np.sum(pd.DataFrame(np.array(temp)).T.corr())/18)/18)#corrélation moyenne entre isomap 1d
 
 
 # corrélation par cluster
-temp0=[]
-temp1=[]
-temp2=[]
-if True:# Isomap 1 dimension, 2 voisins
+if True:# 
+    temp=[]
     for k in range(2,20):
-        iso=Isomap(n_neighbors=k,n_components=1,metric='precomputed')
+        iso=Isomap(n_neighbors=k,n_components=3,metric='precomputed')
         X_transformed=iso.fit_transform(data)  
         
-        cluster0=[]
-        cluster1=[]
-        cluster2=[]
-        for i in range(len(X_transformed)):
-            if cluster[i]==0:
-                cluster0.append(i)
-            if cluster[i]==1:
-                cluster1.append(i)
-            if cluster[i]==2:
-                cluster2.append(i)
-        temp0.append(cluster0)
-        temp1.append(cluster1)
-        temp2.append(cluster2)
-               
-print(np.sum(np.sum(pd.DataFrame(np.array(temp0)).T.corr())/18)/18, 
-      np.sum(np.sum(pd.DataFrame(np.array(temp1)).T.corr())/18)/18,
-      np.sum(np.sum(pd.DataFrame(np.array(temp2)).T.corr())/18)/18)
+        d={}
+        for i in range(clus):
+            d[i]=[]
+        for i in enumerate(np.argsort(X_transformed,0)):
+            d[cluster[i[0]]].append(i[1][0])
+        for i in d:
+            d[i]=np.sort(d[i])
+        temp.append(d)
+    a=pd.DataFrame.from_dict(temp)
+    
+    for i in a:
+        temp=[]
+        for j in a[i]:
+            temp.append(j)
+        print(np.sum(np.sum(pd.DataFrame(temp).T.corr())/18)/18)
