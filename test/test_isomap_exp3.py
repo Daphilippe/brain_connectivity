@@ -5,7 +5,7 @@
 @version: 1.00
 @Recommandation: Python 3.7
 @revision 04/06/21
-@But : influence nb voisin sur isomap
+@But : influence nb voisin sur isomap (peu se faire sous la forme d'un dictionnaire)
 """
 import numpy as np
 import sys
@@ -30,9 +30,10 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-clus=2 
+clus=4
 cluster= np.load(source2+'/labels.npy')[clus-2]
 
+# corrélation intrinsèque
 temp=[]
 if True:# Isomap 1 dimension, 2 voisins
     for k in range(2,20):
@@ -41,14 +42,31 @@ if True:# Isomap 1 dimension, 2 voisins
         [a]=np.argsort(X_transformed,0).T
         temp.append(a.T)     
 a=pd.DataFrame(np.array(temp)).T.corr()
-if True:# Isomap 2 dimension    
-    for k in range(2,20):
-        iso=Isomap(n_neighbors=15,n_components=2,metric='precomputed')
-        X_transformed=iso.fit_transform(data) 
-        
 
-if False:# Isomap 3 dimension, 2 voisins
+
+# corrélation par cluster
+temp0=[]
+temp1=[]
+temp2=[]
+if True:# Isomap 1 dimension, 2 voisins
     for k in range(2,20):
-        iso=Isomap(n_neighbors=15,n_components=3,metric='precomputed')
-        X_transformed=iso.fit_transform(data) 
-    
+        iso=Isomap(n_neighbors=k,n_components=1,metric='precomputed')
+        X_transformed=iso.fit_transform(data)  
+        
+        cluster0=[]
+        cluster1=[]
+        cluster2=[]
+        for i in range(len(X_transformed)):
+            if cluster[i]==0:
+                cluster0.append(i)
+            if cluster[i]==1:
+                cluster1.append(i)
+            if cluster[i]==2:
+                cluster2.append(i)
+        temp0.append(cluster0)
+        temp1.append(cluster1)
+        temp2.append(cluster2)
+               
+print(np.sum(np.sum(pd.DataFrame(np.array(temp0)).T.corr())/18)/18, 
+      np.sum(np.sum(pd.DataFrame(np.array(temp1)).T.corr())/18)/18,
+      np.sum(np.sum(pd.DataFrame(np.array(temp2)).T.corr())/18)/18)
