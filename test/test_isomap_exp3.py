@@ -13,9 +13,6 @@ sys.path.insert(1,'../libs')
 
 import pandas as pd
 from  sklearn.manifold import Isomap
-import matplotlib.pylab as plt
-
-import tools, display, barycenter, process
 
 # Directory
 hemi='L'
@@ -30,24 +27,27 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-clus=9
+clus=6
 cluster= np.load(source2+'/labels.npy')[clus-2]
 
 # corrélation intrinsèque
 if False:# Isomap 1 dimension, 2 voisins
     temp=[]
-    for k in range(2,20):
+    voisins=range(2,25)
+    for k in voisins:
         iso=Isomap(n_neighbors=k,n_components=1,metric='precomputed')
         X_transformed=iso.fit_transform(data)   
         [a]=np.argsort(X_transformed,0).T
         temp.append(a.T)     
-    print(np.sum(np.sum(pd.DataFrame(np.array(temp)).T.corr())/18)/18)#corrélation moyenne entre isomap 1d
+    print(np.sum(np.sum(pd.DataFrame(np.array(temp)).T.corr())/len(voisins))/len(voisins))#corrélation moyenne entre isomap 1d
 
 
 # corrélation par cluster
 if True:# 
     temp=[]
-    for k in range(2,20):
+    voisins=range(2,25)
+    axis=0
+    for k in voisins:
         iso=Isomap(n_neighbors=k,n_components=3,metric='precomputed')
         X_transformed=iso.fit_transform(data)  
         
@@ -55,7 +55,7 @@ if True:#
         for i in range(clus):
             d[i]=[]
         for i in enumerate(np.argsort(X_transformed,0)):
-            d[cluster[i[0]]].append(i[1][0])
+            d[cluster[i[0]]].append(i[1][axis])# on observe selon une composante
         for i in d:
             d[i]=np.sort(d[i])
         temp.append(d)
@@ -65,4 +65,4 @@ if True:#
         temp=[]
         for j in a[i]:
             temp.append(j)
-        print(np.sum(np.sum(pd.DataFrame(temp).T.corr())/18)/18)
+        print(np.min(np.min(pd.DataFrame(temp).T.corr())))# la plus petite corrélation
