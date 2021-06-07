@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
 """
 @author: Duy Anh Philippe Pham
-@date: 04/06/21
+@date: 07/06/21
 @version: 1.00
 @Recommandation: Python 3.7
-@revision 07/06/21
-@But : influence nb voisin/dimension sur isomap (peu se faire sous la forme d'un dictionnaire)
+@But : influence nb cluster sur isomap (peu se faire sous la forme d'un dictionnaire)
 """
 import numpy as np
 import sys
@@ -30,19 +29,20 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-clus=3
-cluster= np.load(source2+'/labels.npy')[clus-2]
-temp3=[]
-# corrélation par cluster
 if True:# 
-    voisins=range(2,25)
-    n_components=3
-    view=[]
-    for k in voisins:# on change le nombre de voisin
+    Lclus=range(2,10)
+    temp3=[]
+    for clus in Lclus:
+        cluster= np.load(source2+'/labels.npy')[clus-2]
+        
+        # corrélation par cluster
+        voisins=2
+        n_components=2
+        view=[]
         temp=[]
         a=None
         for axis in range(n_components):# balayage sur l'ensemble des axes
-            iso=Isomap(n_neighbors=k,n_components=n_components,metric='precomputed')
+            iso=Isomap(n_neighbors=voisins,n_components=n_components,metric='precomputed')
             X_transformed=iso.fit_transform(data)  
             
             d={}
@@ -64,11 +64,10 @@ if True:#
             temp2.append(np.min(np.min(pd.DataFrame(temp).T.corr())))# la plus petite corrélation sur les n axes
         view.append(temp2)
         temp3.append(np.min(view))# on a la corrélation minimal sur notre jeu de donnée
-
-if False:
-    plt.figure(figsize=(10,3))
-    plt.scatter(voisins,temp3)
-    plt.ylim(0,1.25)
-    plt.title('Evolution of the correlation as a function of the number of neighbours - '+hemi)
-    tools.save_fig('neighbours',source2+'/isomap/')
-    tools.save_value(temp3,'neighbours',source2+'/isomap/')    
+            
+plt.figure(figsize=(10,3))
+plt.scatter(Lclus,temp3)
+plt.ylim(0,1.25)
+plt.title('Evolution of the correlation as a function of the number of clusters - '+hemi)
+tools.save_fig('clusters',source2+'/isomap/')
+tools.save_value(temp3,'clusters',source2+'/isomap/')    
