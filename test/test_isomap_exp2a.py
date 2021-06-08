@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 03/06/21
-@version: 1.00
+@version: 1.20
 @Recommandation: Python 3.7
-@revision 04/06/21
+@revision 08/06/21
 @But : Cluster Kmedoids sur isomap
 """
 import numpy as np
