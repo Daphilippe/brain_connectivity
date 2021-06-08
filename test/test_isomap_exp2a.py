@@ -18,7 +18,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='L'
+hemi='R'
 source='../data/'+hemi+'/'
 source2="../variables/clustering/"+hemi
 
@@ -33,7 +33,7 @@ data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 clus=2
 if True:# Isomap 1 dimension, 2 voisins
     for cluster in np.load(source2+'/labels.npy'):
-        iso=Isomap(n_neighbors=15,n_components=1,metric='precomputed')
+        iso=Isomap(n_neighbors=20,n_components=1,metric='precomputed')
         X_transformed=iso.fit_transform(data) 
         
         plt.figure(figsize=(10,3))
@@ -48,7 +48,7 @@ if True:# Isomap 1 dimension, 2 voisins
 clus=2    
 if True:# Isomap 2 dimension    
     for cluster in np.load(source2+'/labels.npy'):
-        iso=Isomap(n_neighbors=15,n_components=2,metric='precomputed')
+        iso=Isomap(n_neighbors=20,n_components=2,metric='precomputed')
         X_transformed=iso.fit_transform(data) 
         
         plt.figure(figsize=(10,10))

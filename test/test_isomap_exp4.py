@@ -36,8 +36,8 @@ if True:#
         cluster= np.load(source2+'/labels.npy')[clus-2]
         
         # corrélation par cluster
-        voisins=2
-        n_components=2
+        voisins=20
+        n_components=3
         view=[]
         temp=[]
         a=None

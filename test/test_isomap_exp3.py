@@ -30,15 +30,19 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-clus=3
+clus=9
 cluster= np.load(source2+'/labels.npy')[clus-2]
 temp3=[]
 # corrélation par cluster
 if True:# 
-    voisins=range(2,25)
-    n_components=3
+    if False:
+        voisins=range(2,25)
+        n_components=3
+    else:
+        k=20
+        dim=range(2,20)
     view=[]
-    for k in voisins:# on change le nombre de voisin
+    for n_components in dim:# on change le nombre de voisin
         temp=[]
         a=None
         for axis in range(n_components):# balayage sur l'ensemble des axes
