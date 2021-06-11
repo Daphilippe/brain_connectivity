@@ -17,8 +17,8 @@ import tools
     
 # Chemins
 hemi='L'
-source='../data/'+hemi+'/'
-variables='../variables/'+hemi+'/'
+source='../../data/'+hemi+'/'
+variables='../../variables/'+hemi+'/'
 destination='maximum/'+hemi+'/'
 
 X=np.load('test/'+hemi+'/mean.npy')

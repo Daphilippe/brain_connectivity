@@ -2,10 +2,11 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 14/05/2021
-@version: 1.25
+@version: 2.00
 @Recommandation: Python 3.7
-@Révision : 28/05/21
+@Révision : 11/06/21
 @But: comparaison barycentre avancées
+- Permet de comparer le barycentre avec le sujet moyen en comparant la position des maximums locaux
 """
 import numpy as np
 import sys
@@ -17,39 +18,21 @@ import matplotlib.pylab as plt
 sys.path.insert(1,'../libs')
 import tools, display
 
-source='barycentre/R/'
-variables='../variables/R/'
-destination='../variables/local_max/'
-size=len(source)
+hemi='R'
+source1='../../barycentre/'+hemi+'/'
+source2='../../data/'+hemi+'/'
+variables='../../variables/'+hemi+'/'
+destination='../../variables/local_max/'
+size=9# a adapter si nécessaire dépend de l'origne des données
 
 # Changement des données
 i=0
 min_distance=1
 percent=90#seuillage des valeurs
 grid_size=101
-
-if False:
-    for np_name in glob.glob(str(source)+'*.np[yz]'):
-        X=np.load(np_name)
-        _,_,data=tools.estimate_pseudo_density(X,grid_size)
-        data=data/np.max(data)
-        
-        coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
-        tools.save_value(coord,'coord_'+str(np_name[size:]),destination)
-        
-        plt.figure()
-        extent = (0,grid_size-1 , 0,grid_size-1)
-        plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
-        plt.autoscale(False)
-        plt.plot(coord[:, 1], coord[:, 0], 'g.')
-        plt.axis('off')
-        plt.title('Peak local max barycenter')
-        tools.save_fig(str(np_name[size:]),destination)
 if False:
     dataX=None
-    source='../data/R/'
-    destination='local_max/'
-    for np_name in glob.glob(str(source)+'*.np[yz]'):
+    for np_name in glob.glob(str(source2)+'*.np[yz]'):
         X=np.load(np_name)
         _,_,data=tools.estimate_pseudo_density(X,grid_size)
         if dataX is None:
@@ -57,18 +40,21 @@ if False:
         else:
             dataX=dataX+data
     dataX=dataX/np.max(dataX)
-    tools.save_value(dataX,'mean_R',destination)
+    tools.save_value(dataX,'mean_'+hemi,destination)
 if True:
-    destination='../variables/local_max/'    
-    data=np.load(destination+'mean_R.npy')    
+    data=np.load(destination+'mean_'+hemi+'.npy')    
     coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
-    tools.save_value(coord,'coord_R',destination)
+    tools.save_value(coord,'coord_'+hemi+'',destination)
     
     plt.figure()
     extent = (0,grid_size-1 , 0,grid_size-1)
     plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
     plt.autoscale(False)
     plt.plot(coord[:, 1], coord[:, 0], 'g.')
-    plt.axis('off')
-    plt.title('Right hemisphere')
-    tools.save_fig('mean_R',destination)
+    plt.axis('on')
+    plt.xlabel('Precentral gyral crest scaled to 100')
+    plt.ylabel('Post central gyral crest scaled to 100')
+    plt.colorbar()
+    plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
+    plt.title(hemi+' hemisphere')
+    tools.save_fig('mean_'+hemi,destination)

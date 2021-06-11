@@ -2,25 +2,26 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 08/04/2021
-@version: 1.75
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 21/04/2021
+@revision: 11/06/2021
 @But: Présentation module
 """
 import numpy as np
 import ot
 
 import sys
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools, display, process
+
+# Directory
+racine='Test/'
 
 # Create data xs and xt (dot map)
 (xs,a),(xt,b)=tools.data_generator_simulation1()    
 # Labelling by position 
 cols,colt=tools.label_position(xs,xt)
 
-# Directory
-racine='Test/'
 # Display data
 display.plot_dots2(xs,xt,xs_color=cols,xt_color=colt,size=(20,20))
 

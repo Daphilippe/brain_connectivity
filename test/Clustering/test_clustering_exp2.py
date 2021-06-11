@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 20/05/21
-@version: 1.20
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 26/05/2021
+@revision: 11/06/2021
 @But: determiner le nb de cluster (clustrering hiearchique)
 """
 import numpy as np
@@ -15,11 +15,13 @@ import pandas as pd
 sys.path.insert(1,'../libs')
 import tools as tools, display
 
-chemin="../variables/clustering/"
 hemi='L'
-d=np.load('../variables/'+hemi+'/matrix.npy')
-index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
-columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
+source1='../../variables/'
+chemin="../../variables/clustering/"
+
+d=np.load(source1+hemi+'/matrix.npy')
+index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
+columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
 if True:# clustering hierarchique
@@ -43,7 +45,7 @@ if True:# clustering hierarchique
             L.append((arg,cluster))
             L_label.append(label)
 
-if True:
+if False:
     for i in L:
         df=data.copy()
         columns = [df.columns.tolist()[i] for i in list(i[0])]

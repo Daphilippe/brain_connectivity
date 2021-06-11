@@ -2,9 +2,12 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 06/05/2021
-@version: 1.25
+@version: 2.00
 @Recommandation: Python 3.7
+@revision: 11/06/2021
 @But: comparaison des algorithmes de barycentre en fonction de l'ordre des sujets
+- calcule de manère itérative le barycentre sujet par sujet (fichier test)
+- Calcule la distance de 2 Wasserstein du barycentre par rapport aux autres sujets
 """
 import numpy as np
 import sys
@@ -138,11 +141,12 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
         tools.save_value(X,str(i+itermax),directory=destination)
         
 # Chemins
-source='../data/L/'
-variables='../variables/L/'
-destination='barycentre/L/'
+hemi='L'
+source='../../data/'+hemi+'/'
+variables='../../variables/'+hemi+'/'
+destination='../../variables/barycentre/'+hemi+'/'
 
-size=len(source)-1
+size=9#len(source)-1 #à adapter selon fichier source
 
 # Changement des données
 measures_locations = []
@@ -164,8 +168,7 @@ for np_name in  L_trie:#glob.glob(str(source)+'*.np[yz]'):
 Nmax=np.shape(measures_locations)[0]
 
 # Initialisation du profil type
-
-if True:# Prend du temps     
+if False:# Prend du temps     
     #Calcul du barycentre itératif
     itermax=0
     # k=int(np.max([np.shape(i)[0] for i in measures_locations]))
@@ -189,16 +192,7 @@ if True:# Prend du temps
     t1_stop = process_time() 
     print(t1_stop-t1_start)
     
-# Sauvegarde des images
-for np_name in glob.glob(str(destination)+'*.np[yz]'):
-    display.show_dot(np.load(np_name),title='Barycenter')
-    tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
-
-    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
-    display.show_map(Img_xs,title='Barycenter')
-    tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
-    
-if True:
+if False:
     L=[]
     X=np.load(destination+"99.npy")
     #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))

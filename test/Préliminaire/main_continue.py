@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 08/04/2021
-@version: 1.75
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 21/04/2021
+@revision: 11/06/2021
 @But: Régularisation
 """
 # -*- coding: utf-8 -*-
@@ -12,7 +12,7 @@ import numpy as np
 import ot
 import sys
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools, display, process
     
 # Directory

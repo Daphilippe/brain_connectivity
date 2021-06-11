@@ -47,7 +47,7 @@ if False:
         scores.append(score)
         scores_bis.append(score_bis)
     
-    if True:#sauvegarde des données
+    if False:#sauvegarde des données
         tools.save_value(value=cluster, title='cluster',directory=chemin)
         tools.save_value(value=scores, title='scores',directory=chemin)
         tools.save_value(value=scores_bis, title='scores_bis',directory=chemin)

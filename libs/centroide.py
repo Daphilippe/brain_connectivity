@@ -2,9 +2,9 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 15/04/2021
-@version: 1.75
+@version: 2.00
 @Recommandation: Python 3.7
-@revision: 21/04/2021
+@revision: 11/06/2021
 @But: Centroide
 @list of functions
 - compute(source='./data/R/',directory='variables/')
@@ -32,7 +32,8 @@ def compute(source='./data/R/',directory='variables/'):
     for np_name in glob.glob(str(source)+'*.np[yz]'):
         numpy_vars[np_name] = np.load(np_name)
         
-    size=len(source)
+    #size=len(source)
+    size=9
     Lval=[]
     Lname=[]
     
@@ -91,7 +92,8 @@ def display(data_source='./data/R/',centroide_source='./variables/R/',directory=
     if data_source[-1]!='/':
         data_source=data_source+'/'
     if data_source[1]=='.':    
-        size=len(data_source)-1
+        #size=len(data_source)-1
+        size=9 #formatage nom
     
     if centroide_source[-1]!='/':
         centroide_source=centroide_source+'/'

@@ -2,9 +2,11 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 04/05/2021
-@version: 1.25
+@version: 2.00
 @Recommandation: Python 3.7
+@revision 11/06/21
 @But: comparaison des algorithmes de barycentre en fonction de l'initalisation
+Test avec 10000 points pour le barycentre (fonction test non pertinante)
 """
 import numpy as np
 import sys
@@ -137,11 +139,12 @@ def iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=100
         tools.save_value(X,str(i+itermax),directory=destination)
         
 # Chemins
-source='../data/R/'
-variables='../variables/R/'
-destination='barycentre_R/10000dots/'
+hemi='R'
+source='../../data/'+hemi+'/'
+variables='../../variables/'+hemi+'/'
+destination='../../variables/barycentre/'+hemi+'/10000dots/'
 
-size=len(source)-1
+size=9# à adapter selon l'origine des données
 
 # Changement des données
 measures_locations = []
@@ -188,17 +191,18 @@ if False:# Prend du temps
     print(t1_stop-t1_start)
     
 # Sauvegarde des images
-for np_name in glob.glob(str(destination)+'*.np[yz]'):
-    display.show_dot(np.load(np_name),title='Barycenter')
-    tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
-
-    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
-    display.show_map(Img_xs,title='Barycenter')
-    tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
+if False:# Fonction non pertinante permet d'afficher l'évolution du barycentre en focntion des sujets donnés
+    for np_name in glob.glob(str(destination)+'*.np[yz]'):
+        display.show_dot(np.load(np_name),title='Barycenter')
+        tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+    
+        _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+        display.show_map(Img_xs,title='Barycenter')
+        tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
         
-if False:
+if False:#calcule de la distance du barycentre vers les 100 autres sujets
     L=[]
-    X=np.load(destination+"99.npy")
+    X=np.load(destination+"99.npy")#récupération du barycentre
     #X=np.load('.'+str(np.load(variables+'centroide.npy')).replace('\\','/'))
     for i in range(np.shape(measures_locations)[0]):
         M=ot.dist(X,measures_locations[i])

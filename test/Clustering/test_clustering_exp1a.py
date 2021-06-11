@@ -4,7 +4,7 @@
 @date: 20/04/2021
 @version: 2.00
 @Recommandation: Python 3.7
-@revision: 26/05/2021
+@revision: 11/06/2021
 @But: clustering
 """
 import numpy as np
@@ -16,11 +16,13 @@ import matplotlib.pylab as plt
 sys.path.insert(1,'../../libs')
 import tools,display
 
-chemin="../variables/clustering/"
 hemi='L'
-d=np.sqrt(np.load('../variables/'+hemi+'/matrix.npy'))
-index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
-columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
+chemin="../../variables/clustering/"
+source1='../../variables/'
+
+d=np.sqrt(np.load(source1+hemi+'/matrix.npy'))
+index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
+columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 if True:
     display.show_map(d**2,'Initial map',cmap=None,origin='upper')

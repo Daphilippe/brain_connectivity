@@ -16,9 +16,10 @@ sys.path.insert(1,'../libs')
 import tools, display, barycenter
 
 # Chemins
-source='../data/L/'
-variables='../variables/L/'
-destination='barycentre/L/'
+hemi='L'
+source='../../data/'+hemi+'/'
+variables='../../variables/'+hemi+'/'
+destination='../../variables/barycentre/'+hemi+'/'
 
 size=len(source)-1
 
@@ -58,12 +59,13 @@ if False:# Prend du temps
     barycenter.iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax,itermax,stopThr=0.01,destination=destination)    
 
 # Sauvegarde des images
-for np_name in glob.glob(str(destination)+'*.np[yz]'):
-    display.show_dot(np.load(np_name),title='Barycenter')
-    tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
-
-    _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
-    display.show_map(Img_xs,title='Barycenter')
-    tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
+if False:
+    for np_name in glob.glob(str(destination)+'*.np[yz]'):
+        display.show_dot(np.load(np_name),title='Barycenter')
+        tools.save_fig('dot_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Dot')
+    
+        _,_,Img_xs=tools.estimate_pseudo_density(np.load(np_name))
+        display.show_map(Img_xs,title='Barycenter')
+        tools.save_fig('map_'+np_name.replace('\\','/')[len(destination):-4],directory=destination+'Map')
 
 sys.exit()

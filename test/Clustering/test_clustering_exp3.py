@@ -2,9 +2,12 @@
 """
 @author: Duy Anh Philippe Pham
 @date: 26/05/21
-@version: 1.00
+@version: 2.00
 @Recommandation: Python 3.7
+@revision: 11/06/21
 @But: Comparaison K-medoid et Wards linckage
+Il faut regénérer les labels de Wards si on veut utiliser ce fichier 
+expérience précédente : test_clustering_exp2.py
 """
 
 import numpy as np
@@ -16,11 +19,13 @@ from sklearn import preprocessing
 sys.path.insert(1,'../libs')
 import tools, display
 
-chemin="../variables/clustering/"
 hemi='L'
-d=np.load('../variables/'+hemi+'/matrix.npy')
-index=np.load('../variables/'+hemi+'/matrix_index.npy',allow_pickle=True)
-columns=np.load('../variables/'+hemi+'/matrix_columns.npy',allow_pickle=True)
+source1='../../variables/'
+chemin="../../variables/clustering/"+hemi+'/'
+
+d=np.load(source1+hemi+'/matrix.npy')
+index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
+columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
 # chargement des données générées
