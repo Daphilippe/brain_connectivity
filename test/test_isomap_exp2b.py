@@ -17,7 +17,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='R'
+hemi='L'
 source='../data/'+hemi+'/'
 source2="../variables/clustering/"+hemi
 
@@ -29,7 +29,7 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-if False:# Isomap 1 dimension, 2 voisins
+if True:# Isomap 1 dimension, 2 voisins
     clus=2    
     for cluster in np.load(source2+'/labels.npy'):
         Lv= range(2,25)
