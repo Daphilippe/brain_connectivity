@@ -28,10 +28,11 @@ if not(all(columns==index)):#controle intégrité matrice distance
     
 d=np.load('../variables/'+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
-
+cluster=None
 if True:# Isomap 1 dimension, 2 voisins
-    clus=2    
-    for cluster in np.load(source2+'/labels.npy'):
+        clus=24
+    #clus=2
+    #for cluster in np.load(source2+'/labels.npy'):
         Lv= range(2,25)
         fig,axs=plt.subplots(len(Lv),sharex=True, sharey=True, figsize=(10,10))
         fig.subplots_adjust(hspace = 2 )
@@ -45,8 +46,9 @@ if True:# Isomap 1 dimension, 2 voisins
         tools.save_fig(clus,source2+'/isomap/dim1/') 
         clus=clus+1
 if True:# Isomap 2 dimension    
-    clus=2    
-    for cluster in np.load(source2+'/labels.npy'):
+        clus=24  
+    #clus=2
+    #for cluster in np.load(source2+'/labels.npy'):
         Lv= range(0,25)
         fig,axs=plt.subplots(int(np.sqrt(len(Lv))),int(np.sqrt(len(Lv))),sharex=True, figsize=(10,10))
         fig.suptitle('Comparison for different values of neighbours')
