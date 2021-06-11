@@ -33,20 +33,22 @@ data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 clus=2
 cluster=np.load(source2+'/labels.npy')[clus-2]#labels des différents clusters
 
-if False:# Isomap 1 dimension, 4 voisins
-    iso=Isomap(n_neighbors=20,n_components=1,metric='precomputed')
+if True:# Isomap 1 dimension, 4 voisins
+    iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
     X_transformed=iso.fit_transform(data) 
     
-    plt.figure(figsize=(10,3))
-    plt.scatter([i[0] for i in X_transformed],np.zeros(len(X_transformed)),marker='*',c=cluster)
-    plt.ylim(-1,1)
-    j=0
-    for i in np.argsort(X_transformed,0):
-        j=j+1
-        #plt.text(X_transformed[i]-0.2,(np.mod(j,10)-5)/10,int(i),fontsize=10)
-    plt.show()
     
-if True:# Isomap 2 dimension, 3 voisins
+    if True:
+        plt.figure(figsize=(10,3))
+        plt.scatter([i[0] for i in X_transformed],np.zeros(len(X_transformed)),marker='*',c=cluster)
+        plt.ylim(-1,1)
+        j=0
+        for i in np.argsort(X_transformed,0):
+            j=j+1
+            plt.text(X_transformed[i]-0.2,(np.mod(j,10)-5)/10,int(i),fontsize=10)
+        plt.show()
+    
+if False:# Isomap 2 dimension, 3 voisins
     iso=Isomap(n_neighbors=6,n_components=2,metric='precomputed')
     X_transformed=iso.fit_transform(data)
     
