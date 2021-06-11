@@ -33,7 +33,7 @@ data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 clus=2
 cluster=np.load(source2+'/labels.npy')[clus-2]#labels des différents clusters
 
-if True:# Isomap 1 dimension, 4 voisins
+if False:# Isomap 1 dimension, 4 voisins
     iso=Isomap(n_neighbors=20,n_components=1,metric='precomputed')
     X_transformed=iso.fit_transform(data) 
     
@@ -46,8 +46,8 @@ if True:# Isomap 1 dimension, 4 voisins
         #plt.text(X_transformed[i]-0.2,(np.mod(j,10)-5)/10,int(i),fontsize=10)
     plt.show()
     
-if False:# Isomap 2 dimension, 3 voisins
-    iso=Isomap(n_neighbors=20,n_components=2,metric='precomputed')
+if True:# Isomap 2 dimension, 3 voisins
+    iso=Isomap(n_neighbors=6,n_components=2,metric='precomputed')
     X_transformed=iso.fit_transform(data)
     
     plt.figure(figsize=(10,10))
@@ -64,7 +64,7 @@ def animate(frame):
   plt.pause(.001)
   return frame
 
-if True:# Isomap 3 dimension, 2 voisins
+if False:# Isomap 3 dimension, 2 voisins
     from mpl_toolkits.mplot3d import Axes3D
     iso=Isomap(n_neighbors=3,n_components=3,metric='precomputed')
     X_transformed=iso.fit_transform(data)
