@@ -24,7 +24,7 @@ index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-if True:# clustering hierarchique
+if False:# clustering hierarchique
     L=[]
     L_label=[]
     import scipy.cluster.hierarchy as sch
@@ -45,7 +45,7 @@ if True:# clustering hierarchique
             L.append((arg,cluster))
             L_label.append(label)
 
-if False:
+if True:
     for i in L:
         df=data.copy()
         columns = [df.columns.tolist()[i] for i in list(i[0])]

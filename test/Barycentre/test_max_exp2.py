@@ -18,11 +18,11 @@ import matplotlib.pylab as plt
 sys.path.insert(1,'../libs')
 import tools, display
 
-hemi='R'
+hemi='L'
 source1='../../barycentre/'+hemi+'/'
 source2='../../data/'+hemi+'/'
 variables='../../variables/'+hemi+'/'
-destination='../../variables/local_max/'
+destination='../../variables/barycentre/local_max/'+hemi
 size=9# a adapter si nécessaire dépend de l'origne des données
 
 # Changement des données
@@ -40,11 +40,11 @@ if False:
         else:
             dataX=dataX+data
     dataX=dataX/np.max(dataX)
-    tools.save_value(dataX,'mean_'+hemi,destination)
+    tools.save_value(dataX,'mean',destination)
 if True:
-    data=np.load(destination+'mean_'+hemi+'.npy')    
+    data=np.load(destination+'/mean'+'.npy')    
     coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
-    tools.save_value(coord,'coord_'+hemi+'',destination)
+    tools.save_value(coord,'mean_coord',destination)
     
     plt.figure()
     extent = (0,grid_size-1 , 0,grid_size-1)
@@ -53,8 +53,8 @@ if True:
     plt.plot(coord[:, 1], coord[:, 0], 'g.')
     plt.axis('on')
     plt.xlabel('Precentral gyral crest scaled to 100')
-    plt.ylabel('Post central gyral crest scaled to 100')
+    plt.ylabel('Postcentral gyral crest scaled to 100')
     plt.colorbar()
     plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
     plt.title(hemi+' hemisphere')
-    tools.save_fig('mean_'+hemi,destination)
+    tools.save_fig('mean',destination)

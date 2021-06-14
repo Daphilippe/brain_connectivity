@@ -3,7 +3,7 @@
 @author: Duy Anh Philippe Pham
 @date: 30/03/2021
 @version: 2.00
-@revision: 28/05/2021
+@revision: 14/06/2021
 @Recommandation: Python 3.7
 
 @list of functions 
@@ -211,6 +211,12 @@ def auto_max(X0,titre,save_title,destination,min_distance=1,percent=90,grid_size
     plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
     plt.autoscale(False)
     plt.plot(coord[:, 1], coord[:, 0], 'g.')
-    plt.axis('off')
+    
+    plt.axis('on')
+    plt.xlabel('Precentral gyral crest scaled to 100')
+    plt.ylabel('Postcentral gyral crest scaled to 100')
+    plt.colorbar()
+    plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
+    
     plt.title(titre)
     tools.save_fig(save_title,destination)

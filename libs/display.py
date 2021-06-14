@@ -263,13 +263,20 @@ def show_dot(xs,xs_color=None,title=None,size=(10,10)):
 def show_map(xs,title,size=(10,10),cmap=plt.cm.magma_r,origin='lower'):
     if origin=='lower':
         extent=(0, 100, 0, 100)
+        fig, ax = plt.subplots(figsize=size)
+        ax.set_title(title)
+        ax.imshow(xs,cmap,origin=origin,extent=extent)
     else:
         extent=(0, 100, 100,0)
-        
-    fig, ax = plt.subplots(figsize=size)
-    ax.set_title(title)
-    ax.imshow(xs,cmap,origin=origin,extent=extent)
-    
+        fig, ax = plt.subplots(figsize=size)
+        ax.set_title(title)
+        ax.autoscale(False)
+        ax.axis('on')
+        ax.set_xlabel('Precentral gyral crest scaled to 100')
+        ax.set_ylabel('Post central gyral crest scaled to 100')
+        ax.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')    
+        ax.imshow(xs,cmap,origin=origin,extent=extent)
+        fig.colorbar()
     
 def plot_map2(x1,x2,sub1title=None,sub2title=None,size=(10,20),cmap=plt.cm.magma_r,origin='lower'):
     if origin=='lower':
