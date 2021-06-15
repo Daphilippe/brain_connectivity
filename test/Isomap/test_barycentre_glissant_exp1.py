@@ -34,10 +34,14 @@ data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
 if True:# Isomap 1 dimension, 2 voisins
     bary=[]
-    iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
-    X_transformed=iso.fit_transform(data) 
-    trie=np.argsort(X_transformed,0)# sujets classés selon l'axe de projection
-    
+    try:
+        index_bis=np.load(source4+'isomap_index_'+hemi+'.npy')
+    except:
+        iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
+        X_transformed=iso.fit_transform(data) 
+        trie=np.argsort(X_transformed,0)# sujets classés selon l'axe de projection
+        index_bis=index[trie]
+        tools.save_value(index_bis, 'isomap_index_'+hemi,source4)
     #barycentre
     ### Paramètres du barycentre
     k=500
@@ -47,8 +51,6 @@ if True:# Isomap 1 dimension, 2 voisins
     
     ### Paramètre pour l'intervalle du barycentre glissant
     inter=31
-    index_bis=index[trie]
-    tools.save_value(index_bis, 'isomap_index_'+hemi,source2)
     
     for i in range(len(index_bis)-inter):
         measures_locations=[]
@@ -57,4 +59,4 @@ if True:# Isomap 1 dimension, 2 voisins
             measures_locations.append(np.load(source+str(j[0])+'_connectivity_withHKnob.npy'))
             measures_weights.append(np.ones( np.shape(measures_locations[-1])[0] )*1/np.shape(measures_locations[-1])[0])
         bary.append(barycenter.iterative_barycenter(X,X_init,b,measures_locations,measures_weights,Nmax=inter,save=False))   
-    tools.save_value(bary,'bary_glissant_'+str(inter)+'_'+hemi,source4+str(inter))    
+    tools.save_value(bary,'bary_glissant_'+str(inter)+'_'+hemi,source4)    

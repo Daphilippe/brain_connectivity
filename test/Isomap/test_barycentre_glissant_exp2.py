@@ -36,12 +36,12 @@ inter=31
 bary=np.load(source2+'bary_glissant_'+str(inter)+'_'+hemi+'.npy')
 
 try:
-    trie=np.load(source2+'isomap_index_'+hemi+'.npy')
+    index_bis=np.load(source2+'isomap_index_'+hemi+'.npy')
 except:
     iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
     X_transformed=iso.fit_transform(data) 
-    trie=np.argsort(X_transformed,0)
-
+    trie=np.argsort(X_transformed,0)# sujets classés selon l'axe de projection
+    index_bis=index[trie]
 
 min_distance=1
 percent=90#seuillage des valeurs
@@ -50,7 +50,7 @@ liste=[]
 if True:
     for i in enumerate(bary):
         text='Barycenter of:'
-        for j in index[trie[i[0]:i[0]+inter]]:
+        for j in index_bis[i[0]:i[0]+inter]:
             text+=' '+str(j[0])
         _,_,img_xs=tools.estimate_pseudo_density(i[1])
         #data=img_xs/np.max(img_xs)
@@ -66,7 +66,7 @@ if True:
             plt.plot(coord[:, 1], coord[:, 0], 'g.')
             plt.axis('on')
             plt.xlabel('Precentral gyral crest scaled to 100')
-            plt.ylabel('Post central gyral crest scaled to 100')
+            plt.ylabel('Postcentral gyral crest scaled to 100')
             plt.colorbar()
             plt.clim(0,1)
             plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
