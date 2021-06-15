@@ -9,7 +9,7 @@
 """
 import numpy as np
 import sys
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 
 import pandas as pd
 from  sklearn.manifold import Isomap
@@ -18,7 +18,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='L'
+hemi='R'
 source='../../data/'+hemi+'/'
 source2="../../variables/clustering/"+hemi
 source3='../../variables/'
@@ -46,7 +46,7 @@ if True:# Isomap 1 dimension, 2 voisins
     X=None
     
     ### Paramètre pour l'intervalle du barycentre glissant
-    inter=21
+    inter=31
     index_bis=index[trie]
     
     for i in range(len(index_bis)-inter):
