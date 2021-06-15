@@ -19,7 +19,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='L'
+hemi='R'
 source='../../data/'+hemi+'/'
 source2='../../variables/isomap/'+hemi+'/barycentre glissant/'
 source3="../../variables/"
@@ -32,12 +32,15 @@ if not(all(columns==index)):#controle intégrité matrice distance
 d=np.load(source3+hemi+'/matrix.npy')
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)
 
-inter=21
+inter=31
 bary=np.load(source2+'bary_glissant_'+str(inter)+'_'+hemi+'.npy')
 
-iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
-X_transformed=iso.fit_transform(data) 
-trie=np.argsort(X_transformed,0)
+try:
+    trie=np.load(source2+'isomap_index_'+hemi+'.npy')
+except:
+    iso=Isomap(n_neighbors=10,n_components=1,metric='precomputed')
+    X_transformed=iso.fit_transform(data) 
+    trie=np.argsort(X_transformed,0)
 
 
 min_distance=1
@@ -54,11 +57,11 @@ if True:
         liste.append(img_xs)
 liste=liste/np.max(liste)
 if True:
-    for data in liste:
-            coord = peak_local_max((data>np.percentile(data, percent))*data, min_distance)
+    for i in enumerate(liste):
+            coord = peak_local_max((i[1]>np.percentile(i[1], percent))*i[1], min_distance)
             plt.figure()
             extent = (0,grid_size-1 , 0,grid_size-1)
-            plt.imshow(data,cmap=plt.cm.magma_r,origin='lower',extent=extent)
+            plt.imshow(i[1],cmap=plt.cm.magma_r,origin='lower',extent=extent)
             plt.autoscale(False)
             plt.plot(coord[:, 1], coord[:, 0], 'g.')
             plt.axis('on')

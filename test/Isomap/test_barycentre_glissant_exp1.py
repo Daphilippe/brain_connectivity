@@ -18,7 +18,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='R'
+hemi='L'
 source='../../data/'+hemi+'/'
 source2="../../variables/clustering/"+hemi
 source3='../../variables/'
@@ -48,6 +48,7 @@ if True:# Isomap 1 dimension, 2 voisins
     ### Paramètre pour l'intervalle du barycentre glissant
     inter=31
     index_bis=index[trie]
+    tools.save_value(index_bis, 'isomap_index_'+hemi,source2)
     
     for i in range(len(index_bis)-inter):
         measures_locations=[]
