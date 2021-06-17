@@ -19,7 +19,7 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='R'
+hemi='L'
 source='../../data/'+hemi+'/'
 source2='../../variables/isomap/'+hemi+'/barycentre glissant/'
 source3="../../variables/"
@@ -43,7 +43,7 @@ except:
     trie=np.argsort(X_transformed,0)# sujets classés selon l'axe de projection
     index_bis=index[trie]
 
-min_distance=1
+min_distance=3
 percent=90#seuillage des valeurs
 grid_size=101# valeur par défaut
 liste=[]
@@ -57,19 +57,30 @@ if True:
         liste.append(img_xs)
 liste=liste/np.max(liste)
 if True:
+    k=[]
     for i in enumerate(liste):
             coord = peak_local_max((i[1]>np.percentile(i[1], percent))*i[1], min_distance)
-            plt.figure()
-            extent = (0,grid_size-1 , 0,grid_size-1)
-            plt.imshow(i[1],cmap=plt.cm.magma_r,origin='lower',extent=extent)
-            plt.autoscale(False)
-            plt.plot(coord[:, 1], coord[:, 0], 'g.')
-            plt.axis('on')
-            plt.xlabel('Precentral gyral crest scaled to 100')
-            plt.ylabel('Postcentral gyral crest scaled to 100')
-            plt.colorbar()
-            plt.clim(0,1)
-            plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
-            plt.title('Central subject n°'+str(i[0]+int(inter/2)))
-            tools.save_fig(str(i[0]),source2+str(inter)+'/')
-            #tools.save_value(coord, str(i[0]),source2+'/'+str(inter)+'/')
+            if False:
+                plt.figure()
+                extent = (0,grid_size-1 , 0,grid_size-1)
+                plt.imshow(i[1],cmap=plt.cm.magma_r,origin='lower',extent=extent)
+                plt.autoscale(False)
+                plt.plot(coord[:, 1], coord[:, 0], 'g.')
+                plt.axis('on')
+                plt.xlabel('Precentral gyral crest scaled to 100')
+                plt.ylabel('Postcentral gyral crest scaled to 100')
+                plt.colorbar()
+                plt.clim(0,1)
+                plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
+                plt.title('Central subject n°'+str(i[0]+int(inter/2)))
+                #plt.show()
+                tools.save_fig(str(i[0]),source2+str(inter)+'/')
+                
+            if True:# traitement maximum main
+                temp=np.sort(coord,axis=0)
+                temp2=[]
+                for w in temp:
+                    if (w[0]>40 and w[0]<80) or (w[1]>40 and w[1]<80):
+                        temp2.append([w[0],w[1]])
+                k.append(temp2)
+                #tools.save_value(coord, str(i[0]),source2+'/'+str(inter)+'/')
