@@ -258,7 +258,7 @@ name=[name[i] for i in argval_W22]
 point=[np.shape(np.load('../data/R/'+str(i)+'_connectivity_withHKnob.npy'))[0] for i in name]
 """
 import matplotlib.pylab as plt
-data=np.load('../data/R/123117_R_connectivity_withHKnob.npy')
+data=np.load('../data/L/495255_L_connectivity_withHKnob.npy')
 _,_,data=tools.estimate_pseudo_density(data)
 grid_size=100
 
@@ -271,6 +271,7 @@ plt.xlabel('Precentral gyral crest scaled to 100')
 plt.ylabel('Postcentral gyral crest scaled to 100')
 plt.colorbar()
 plt.grid(linestyle = '--', linewidth = 0.5,alpha=0.5, which='major')
-tools.save_fig('R','./test')
+plt.title('L - hemisphere')
+tools.save_fig('L','./test')
 
 sys.exit()
