@@ -47,7 +47,7 @@ if True:# Isomap 1 dimension, 2 voisins
         tools.save_fig(clus,source2+'/isomap/dim1/')
         clus=clus+1
 clus=2    
-if True:# Isomap 2 dimension    
+if False:# Isomap 2 dimension    
     for cluster in np.load(source2+'/labels.npy'):
         iso=Isomap(n_neighbors=20,n_components=2,metric='precomputed')
         X_transformed=iso.fit_transform(data) 
