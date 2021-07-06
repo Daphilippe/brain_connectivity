@@ -41,7 +41,7 @@ This corresponds to different experiments with conservation of intermediate resu
 
 ## Presentation
 Presentation of the work done as part of an end-of-study project as part of a double degree 
-between [CPE Lyon](](https://www.cpe.fr/en/)) and [Jean Monnet University](https://mldm.univ-st-etienne.fr) to the [MeCa team](https://meca-brain.org).
+between [CPE Lyon](https://www.cpe.fr/en/) and [Jean Monnet University](https://mldm.univ-st-etienne.fr) to the [MeCa team](https://meca-brain.org).
 
 # Libraries used
 * matplotlib 
