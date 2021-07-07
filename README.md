@@ -17,7 +17,7 @@ start: February 8, 2021
 end: July 31, 2021
 
 # Presentation of the projet
-The first objective of our work is to build the best group subject. To achieve that, we will use tools from the optimal transport that will allow us to have a better alignment between individuals
+The first objective of our work is to build the best representative subject. To achieve that, we will use tools from the optimal transport that will allow us to have a better alignment between individuals
 and to generate a better quality group profile. The choice to work with the theory of optimal transport is motivated by the fact that the different connectivity maps can be seen as different
 probability distributions. The goal of optimal transport is to define the least costly transformation from one distribution to another. 
 This allows us to determine the group profile as the barycenter of all the individual profiles, in the sense of optimal transport, and thus to project
