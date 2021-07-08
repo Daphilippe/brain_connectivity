@@ -12,19 +12,19 @@ import numpy as np
 import sys
 import pandas as pd
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools as tools, display
 
 hemi='L'
 source1='../../variables/'
-chemin="../../variables/clustering/"
+chemin="../../variables/clustering/"+hemi+'/'
 
 d=np.load(source1+hemi+'/matrix.npy')
 index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*np.sqrt(d),index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 
-if False:# clustering hierarchique
+if True:# clustering hierarchique
     L=[]
     L_label=[]
     import scipy.cluster.hierarchy as sch
@@ -46,12 +46,13 @@ if False:# clustering hierarchique
             L_label.append(label)
 
 if True:
+    # Réorganisation de la matrice de distance
     for i in L:
         df=data.copy()
         columns = [df.columns.tolist()[i] for i in list(i[0])]
         df = df.reindex(columns, axis='columns')
         df = df.reindex(columns, axis='index')
     
-        display.show_map(df**2,'Nombre de cluster : '+str(i[1]),cmap=None,origin='upper')
+        display.show_map(df**2,'Nombre de cluster : '+str(i[1]),cmap=None,origin='upper',matrix=True)
         
 tools.save_value(value=L_label, title='labels_wards',directory=chemin)    

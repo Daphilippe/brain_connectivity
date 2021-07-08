@@ -71,8 +71,9 @@ if True:
     plt.title('Elbow score - '+hemi)
     tools.save_fig('elbow_'+hemi,chemin)
 
-    # réorganisation
+    
 if True:
+    # réorganisation de la matrice de distance
     clus=1
     for l in labels:
         clus=clus+1
@@ -80,5 +81,5 @@ if True:
         columns = [df.columns.tolist()[i] for i in list(np.argsort(l))]
         df = df.reindex(columns, axis='columns')
         df = df.reindex(columns, axis='index')
-        display.show_map(df**2,'Number of cluster: '+str(cluster[clus-2]),cmap=None,origin='upper')
+        display.show_map(df**2,'Number of cluster: '+str(cluster[clus-2]),cmap=None,origin='upper',matrix=True)
         tools.save_fig('reorg_'+str(clus)+'_'+hemi,chemin+'/matrix')

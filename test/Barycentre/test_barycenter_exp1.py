@@ -16,7 +16,7 @@ import ot
 
 from time import process_time
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools, display
 
 # calcul barycentre 

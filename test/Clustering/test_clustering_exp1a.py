@@ -25,9 +25,9 @@ index=np.load(source1+hemi+'/matrix_index.npy',allow_pickle=True)
 columns=np.load(source1+hemi+'/matrix_columns.npy',allow_pickle=True)
 data=pd.DataFrame((d>0.01)*d,index=index,columns=columns)#0 sur la diagonale, probleme de virgule flotante résolue
 if True:
-    display.show_map(d**2,'Initial map',cmap=None,origin='upper')
+    display.show_map(d**2,'Initial map',cmap=None,origin='upper',matrix=True)
 # diagonalisation
-if True: #acnalyse spectrale
+if True: #analyse spectrale
     from numpy import linalg as LA
     df=data.copy()
     dfb= df/np.max(df)# convert distance matrix to similarity matrix
@@ -47,7 +47,7 @@ if True: #acnalyse spectrale
     df = df.reindex(columns, axis='columns')
     df = df.reindex(columns, axis='index')
     
-    display.show_map(df**2,'Analyse spectrale',cmap=None,origin='upper')
+    display.show_map(df**2,'Analyse spectrale',cmap=None,origin='upper',matrix=True)
     print(p)
 
 if True:# clustering hierarchique
@@ -66,7 +66,7 @@ if True:# clustering hierarchique
     df = df.reindex(columns, axis='columns')
     df = df.reindex(columns, axis='index')
     
-    display.show_map(df**2,'Number of cluster :'+str(cluster),cmap=None,origin='upper')
+    display.show_map(df**2,'Number of cluster :'+str(cluster),cmap=None,origin='upper',matrix=True)
     
     print(np.argsort(label))
 sys.exit()

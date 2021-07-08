@@ -16,7 +16,7 @@ import sys
 import pandas as pd
 from sklearn import preprocessing
 
-sys.path.insert(1,'../libs')
+sys.path.insert(1,'../../libs')
 import tools, display
 
 hemi='L'
