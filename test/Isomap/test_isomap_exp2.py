@@ -17,10 +17,12 @@ import matplotlib.pylab as plt
 import tools, display, barycenter, process
 
 # Directory
-hemi='L'
+hemi='R'
 source='../../data/'+hemi+'/'
 source2="../../variables/clustering/"+hemi
 source3='../../variables/'
+resultats='../../variables/isomap/'+hemi+'/'
+
 columns=np.load(source3+hemi+'/matrix_columns.npy',allow_pickle=True)
 index=np.load(source3+hemi+'/matrix_index.npy',allow_pickle=True)
 if not(all(columns==index)):#controle intégrité matrice distance
@@ -43,7 +45,7 @@ if True:# Isomap 1 dimension, 2 voisins
             axs[v-2].yaxis.set_visible(False)
             axs[v-2].set_title(str(v)+' neighbours', pad=5)
             axs[v-2].scatter([i[0] for i in X_transformed],np.zeros(len(X_transformed)),marker='*',c=cluster)
-        tools.save_fig(clus,source2+'/isomap/dim1/') 
+        tools.save_fig(clus,resultats+'dim1/') 
         clus=clus+1
 if True:# Isomap 2 dimension    
         clus=24  
@@ -58,5 +60,5 @@ if True:# Isomap 2 dimension
               
             axs[int(np.floor(v/5)),int(v%5)].set_title(str(v+2)+' neighbours')
             axs[int(np.floor(v/5)),int(v%5)].scatter([i[0] for i in X_transformed],[i[1] for i in X_transformed],marker='*',c=cluster)          
-        tools.save_fig(clus,source2+'/isomap/dim2/')
+        tools.save_fig(clus,resultats+'dim2/')
         clus=clus+1
