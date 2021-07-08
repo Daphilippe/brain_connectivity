@@ -1,6 +1,8 @@
 Étude sur la variabilité des individus
 # main_clustering.py
 Détermination des sous-barycentres en fonction des clusters déterminés par le kmedoids
+# main_isomap.py
+Comparaison entre l'isomap dim =1 généré sur l'hémisphère gauche et l'hémisphère droit
 # test_isomap_exp1.py
 Détermination axe de variation par un isomap dim = 1
 # test_isomap_exp2.py
