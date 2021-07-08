@@ -22,6 +22,7 @@ hemi='R'
 source='../../data/'+hemi+'/'
 source2="../../variables/clustering/"+hemi
 source3='../../variables/'
+resultats='../../variables/isomap/'+hemi+'/'
 
 columns=np.load(source3+hemi+'/matrix_columns.npy',allow_pickle=True)
 index=np.load(source3+hemi+'/matrix_index.npy',allow_pickle=True)
@@ -44,7 +45,7 @@ if True:# Isomap 1 dimension, 2 voisins
         for i in np.argsort(X_transformed,0):
             j=j+1
             plt.text(X_transformed[i]-0.2,(np.mod(j,10)-5)/10,int(i),fontsize=10)
-        tools.save_fig(clus,source2+'/isomap/dim1/')
+        tools.save_fig(clus,resultats+'dim1/')
         clus=clus+1
 clus=2    
 if False:# Isomap 2 dimension    
@@ -58,7 +59,7 @@ if False:# Isomap 2 dimension
             plt.annotate(i[0],i[1],fontsize=10)
             
         plt.title('Isomap dim 2 - '+str(clus)+' clusters')
-        tools.save_fig(clus,source2+'/isomap/dim2/')
+        tools.save_fig(clus,resultats+'dim2/')
         clus=clus+1
 
 if False:# Isomap 3 dimension, 2 voisins
