@@ -58,7 +58,6 @@ iso=Isomap(n_neighbors=7,n_components=1,metric='precomputed')
 X_transformedR=iso.fit_transform(data) 
 clusterR=np.load(source2+'/labels.npy')[0]
 
-
 fig,axs=plt.subplots(2,sharex=True, sharey=True, figsize=(10,10))
 fig.subplots_adjust(hspace = 2 )
 axs[0].yaxis.set_visible(False)
