@@ -44,7 +44,7 @@ if True:# Isomap 1 dimension, 2 voisins
         tools.save_value(index_bis, 'isomap_index_'+hemi,source4)
     #barycentre
     ### Paramètres du barycentre
-    k=500
+    k=2000#nombre de point d'initialisation
     X_init = np.random.normal(0., 1., (k, 2))  # initial Dirac locations
     b=np.ones(k)*1/k
     X=None
