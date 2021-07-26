@@ -10,9 +10,6 @@ import numpy as np
 import sys
 sys.path.insert(1,'../../libs')
 
-from sklearn.cluster import DBSCAN
-from sklearn import metrics
-
 import matplotlib.pylab as plt
 
 import tools, display, barycenter, process
@@ -74,12 +71,11 @@ if False: # affiche les masques
     display.show_map(mask3,'mask3')
     display.show_map(mask4,'mask4')
 
-Larea1=[]
-Larea2=[]
-Larea3=[]
-Larea4=[]
-
 if True:#Etude densité
+    Larea1=[]
+    Larea2=[]
+    Larea3=[]
+    Larea4=[]
     for X in Lglissant:
         _,_,img_xs=tools.estimate_pseudo_density(X)
         img_xs=img_xs/np.sum(img_xs)
@@ -88,3 +84,14 @@ if True:#Etude densité
         Larea2.append(np.sum(img_xs*mask2))
         Larea3.append(np.sum(img_xs*mask3))
         Larea4.append(np.sum(img_xs*mask4))
+
+if True:# Affichage des figures de suivies
+    plt.figure()
+    plt.scatter(list(range(0,len(Larea1))),Larea1,label='area 1 - ventral',marker='+')
+    plt.scatter(list(range(0,len(Larea1))),Larea2,label='area 2 - ventral',marker='+')
+    plt.scatter(list(range(0,len(Larea1))),Larea3,label='area 3 - dorsal',marker='*')
+    plt.scatter(list(range(0,len(Larea1))),Larea4,label='area 4 - dorsal',marker='*')
+    plt.legend()
+    plt.title(hemi+" - Density tracking")
+    plt.ylim(0,np.max([Larea1,Larea2,Larea3,Larea4])*1.1)
+    plt.show()
